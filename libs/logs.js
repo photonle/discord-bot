@@ -62,6 +62,7 @@ class TextLogger extends Logger {
 					if (err){throw err}
 					this.ready = true
 				})
+				return
 			}
 
 			if (stat.isDirectory()){
@@ -72,7 +73,7 @@ class TextLogger extends Logger {
 				this.ready = true
 				this.onReady()
 			} else {
-				throw new TypeError("./discord-logs is present but not a directory.")
+				throw new TypeError("log dir is present but not a directory.")
 			}
 		})
 	}
