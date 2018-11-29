@@ -108,14 +108,14 @@ module.exports = new TextLogger("./bot-logs")
 // 		module.exports.log(line.toString())
 // 	}
 // }
-console.warn = function(...rest){
-	for (line of rest){
-		module.exports.warn(line.toString())
-	}
-}
-
-console.error = function(...rest){
-	for (line of rest){
-		module.exports.error(line.toString())
-	}
-}
+// console.warn = function(...rest){
+// 	for (line of rest){
+// 		module.exports.warn(line.toString())
+// 	}
+// }
+//
+// console.error = function(...rest){
+// 	for (line of rest){
+// 		module.exports.error(line.toString())
+// 	}
+// }

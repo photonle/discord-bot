@@ -1,6 +1,6 @@
 {
-  "name": "doctor-interbot",
-  "version": "1.3.4",
+  "name": "photon-bot",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
