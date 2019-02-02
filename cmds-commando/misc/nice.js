@@ -3,11 +3,10 @@ const Command = require("discord.js-commando").Command
 module.exports = class NiceCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: 'nice',
+			name: 'debug',
 			group: 'util',
-			memberName: 'nice',
-			description: '*nice*',
-			args: []
+			memberName: 'debug',
+			description: 'Output debug information such as uptime, API latency and version.',
 		});
 	}
 
