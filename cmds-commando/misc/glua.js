@@ -6,7 +6,7 @@ module.exports = class GLuaLookupCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'glua',
-			group: 'misc',
+			group: 'util',
 			memberName: 'glua',
 			description: 'Search the GMod Lua Docs.',
 			args: [{
