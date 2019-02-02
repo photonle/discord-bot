@@ -12,6 +12,7 @@ module.exports = class NiceCommand extends Command {
 	}
 
 	async run(msg, args){
-		return msg.channel.send("https://cdn.discordapp.com/attachments/539928445984178201/541373345644544020/weflip-thumbsup_904.png")
+		console.log("running")
+		// return msg.channel.send("https://cdn.discordapp.com/attachments/539928445984178201/541373345644544020/weflip-thumbsup_904.png")
 	}
 };
