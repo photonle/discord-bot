@@ -54,24 +54,9 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
+# dotenv environment vars
 .env
 .env.*
 
 # phpstorm IDE files.
 .idea/
-routes/
-views/
-public/
-bin/
-index2.js
-index.js
-package-lock.json
-app.js
-
-# Data Files
-\#*.json
-
-# Enviroment
-.env.js
-data/bans.json
