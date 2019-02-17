@@ -1,5 +1,5 @@
 const Command = require("discord.js-commando").Command
-const [Attachment, Permissions]= require("discord.js")
+const {Attachment, Permissions} = require("discord.js")
 const P = Permissions.FLAGS
 
 module.exports = class NiceCommand extends Command {
