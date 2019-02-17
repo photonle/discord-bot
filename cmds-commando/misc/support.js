@@ -1,17 +1,19 @@
 const Command = require('discord.js-commando').Command;
 const RichEmbed = require("discord.js").RichEmbed
 
-module.exports = class TroubleshootCommand extends Command {
+module.exports = class SupportCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'support',
 			group: 'util',
 			memberName: 'support',
 			description: 'Send a small help message to a user giving basic support.',
+			clientPermissions: ['MANAGE_MESSAGES'],
 		});
 	}
 
 	async run(msg, args, _){
+		await msg.delete()
 		return msg.channel.send(`Make sure you've read the pinned messages.
 Please try the following:
 	• Uninstall the last Photon addon you installed before your issue started to occur.
