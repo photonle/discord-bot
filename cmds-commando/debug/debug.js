@@ -10,10 +10,10 @@ module.exports = class DebugCommand extends Command {
 			group: 'debug',
 			memberName: 'debug',
 			description: 'Output debug information such as uptime, API latency and version.',
-		});
+		})
 	}
 
-	async run(msg, args){
+	async run(msg, args, _){
 		let rich = new RichEmbed()
 
 		rich.setAuthor("Doctor Internet", msg.client.users.get("239031520587808769").avatarURL, "https://limelightgaming.net/forums/user-2746.html")
