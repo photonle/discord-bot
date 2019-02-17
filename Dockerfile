@@ -1,5 +1,5 @@
 FROM node:11
-WORKDIR /usr/src/photon-bot
+WORKDIR /usr/src/app
 VOLUME /app
 
 COPY package*.json ./
