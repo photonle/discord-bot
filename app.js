@@ -62,8 +62,18 @@ let warned = new Set()
 client.on('typingStart', (channel, user) => {
 	let id = channel.id
 	let gm = channel.guild.member(user)
-	if (no_tag_channels.has(id) && !warned.has(user.id) && (!gm || !gm.roles.some((role) => {return support.has(role.id)}))){
-		channel.send(`Wait, ${user.toString()}! If you're about to tag the Core Development Team or it's members, don't! We have a support team ready to help you!`)
+	if (no_tag_channels.has(id) && !warned.has(user.id)){
+		channel.send(`Wait, ${user.toString()}! If you're looking for support, please do not tag any of the Core Development Team (red) members. We have a Support Team ready to help you!
+Before you tag anyone, please read the pinned messages.
+
+\`\`\`
+• Uninstall the last Photon addon you installed before your issue started to occur.
+• Try restarting your game.
+• Try looking through your code or addons to potentially find something not entered correctly or missing.
+• Finally, head over to the Photon wiki page for further help: https://photon.lighting/wiki/index.php?title=Main_Page
+\`\`\`
+
+If none of the above has help fixed your issue, go ahead and tag one of the blue Support Team members and they will be with you shortly.`)
 		warned.add(user.id)
 	}
 })
