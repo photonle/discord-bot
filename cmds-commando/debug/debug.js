@@ -13,7 +13,6 @@ module.exports = class DebugCommand extends Command {
 	}
 
 	async run(msg, args){
-		let info = msg.client.utils.getDebugInfo()
 		let rich = new RichEmbed()
 		let up = process.uptime()
 
