@@ -19,21 +19,18 @@ module.exports = class PurgeCommand extends Command {
 					max: 200
 				},
 			]
-		});
+		})
+
+		this.url = "https://lmgtfy.com/?q="
 	}
 
-	async run(msg, args){
-		let url = "https://lmgtfy.com/?q="
-
+	async run(msg, args, _){
 		if (args.term === '^'){
-			msg.channel.fetchMessages({limit: 1, before: msg.id})
-				.then((msgs) => {
-					let query = encodeURI(msgs.first().content)
-					msg.channel.send(`${msgs.first().author.toString()}, <${url}${query}>`)
-				})
-		} else {
-			let query = encodeURI(args.term.toString())
-			msg.reply(`<${url}${query}>`)
+			let msgs = await msg.channel.fetchMessages({limit: 1, before: msg.id})
+			args.term = msgs.first().content
 		}
+
+		let query = encodeURI(args.term.toString())
+		msg.reply(`<${this.url}${query}>`)
 	}
-};
+}
