@@ -63,7 +63,7 @@ client.on('typingStart', (channel, user) => {
 	let id = channel.id
 	let gm = channel.guild.member(user)
 	if (no_tag_channels.has(id) && !warned.has(user.id) && (!gm || !gm.roles.some((role) => {return support.has(role.id)}))){
-		channel.send(`Wait, ${user.toString()}! If you're looking for support, please do not tag any of the Core Development Team (red) members. We have a Support Team ready to help you!
+		channel.send(`Hi, ${user.toString()}! If you're looking for support, please do not tag any of the Core Development Team (red) members. We have a Support Team ready to help you!
 
 *Before* you tag anyone, please read the pinned messages.
 To troubleshoot your issue on your own, please try the following:
