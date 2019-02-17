@@ -1,5 +1,6 @@
 const Command = require('discord.js-commando').Command
 const RichEmbed = require("discord.js").RichEmbed
+const Moment = require("moment")
 const pkg = require("../../package.json")
 
 module.exports = class DebugCommand extends Command {
@@ -14,13 +15,12 @@ module.exports = class DebugCommand extends Command {
 
 	async run(msg, args){
 		let rich = new RichEmbed()
-		let up = process.uptime()
 
 		rich.setAuthor("Doctor Internet", msg.client.users.get("239031520587808769").avatarURL, "https://limelightgaming.net/forums/user-2746.html")
 		rich.setDescription(`A bot by Doctor Internet\nDebug Information`)
 
 		rich.addField("Version", `${pkg.name}@${pkg.version}`, true)
-		rich.addField("Uptime", up, true)
+		rich.addField("Uptime", Moment.duration(process.uptime(), 's').humanize(), true)
 		rich.addField("Latency", this.client.ping, true)
 		rich.setColor([120, 120, 120])
 
