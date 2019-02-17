@@ -22,6 +22,7 @@ class Logger {
 
 		return true
 	}
+
 	warn(msg){
 		if (!this.ready){
 			this.stack.push(["warn", msg])
@@ -30,6 +31,7 @@ class Logger {
 
 		return true
 	}
+
 	error(msg){
 		if (!this.ready){
 			this.stack.push(["error", msg])
@@ -105,18 +107,18 @@ class TextLogger extends Logger {
 module.exports = new TextLogger("/app/bot-logs")
 
 console.log = function(...rest){
-	for (line of rest){
+	for (let line of rest){
 		module.exports.log(line.toString())
 	}
 }
 console.warn = function(...rest){
-	for (line of rest){
+	for (let line of rest){
 		module.exports.warn(line.toString())
 	}
 }
 
 console.error = function(...rest){
-	for (line of rest){
+	for (let line of rest){
 		module.exports.error(line.toString())
 	}
 }

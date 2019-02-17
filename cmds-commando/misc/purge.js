@@ -20,11 +20,11 @@ module.exports = class PurgeCommand extends Command {
 					default: 1
 				},
 			]
-		});
+		})
 	}
 
-	async run(msg, args){return do_purge(msg, msg.id, args.purge, 0)}
-};
+	async run(msg, args, _){return do_purge(msg, msg.id, args.purge, 0)}
+}
 
 function purge_messages(chnl, before, max){
 	console.log("running purge of " + max + " prior to " + before)

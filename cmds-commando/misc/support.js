@@ -1,5 +1,4 @@
-const Command = require('discord.js-commando').Command;
-const RichEmbed = require("discord.js").RichEmbed
+const Command = require('discord.js-commando').Command
 
 module.exports = class SupportCommand extends Command {
 	constructor(client) {
@@ -9,7 +8,7 @@ module.exports = class SupportCommand extends Command {
 			memberName: 'support',
 			description: 'Send a small help message to a user giving basic support.',
 			clientPermissions: ['MANAGE_MESSAGES'],
-		});
+		})
 	}
 
 	async run(msg, args, _){
@@ -22,4 +21,4 @@ Please try the following:
 	• Finally, head over to the Photon wiki page for further help: https://photon.lighting/wiki/index.php?title=Main_Page
 `)
 	}
-};
+}
