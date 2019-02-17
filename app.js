@@ -1,6 +1,3 @@
-process.on('uncaughtException', console.error)
-process.on('unhandledRejection', console.error)
-
 // Third Party Libs
 const Discord = require("discord.js-commando")
 const http = require("https")
@@ -118,3 +115,6 @@ http.get("https://samuelmaddock.github.io/glua-docs/data/glua.json", function(re
 
 // Log our bot in
 client.login(token);
+
+process.on('uncaughtException', console.error)
+process.on('unhandledRejection', console.error)
