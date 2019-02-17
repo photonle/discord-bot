@@ -11,6 +11,12 @@ module.exports = class SupportCommand extends Command {
 		})
 	}
 
+	/**
+	 * @param {CommandMessage} msg The incoming message.
+	 * @param {Object|string|Array<string>} args The command arguments.
+	 * @param {boolean} _ If the incoming message is from a pattern match.
+	 * @returns {Promise<Message>}
+	 */
 	async run(msg, args, _){
 		await msg.delete()
 		return msg.channel.send(`Make sure you've read the pinned messages.
