@@ -2,26 +2,20 @@
 const Discord = require("discord.js-commando")
 const http = require("https")
 
-// Own Libs
-const DiscordUtils = require("./libs/misc.js").DiscordUtils;
-
 // Configs
-const pkg = require("./package.json");
-const env = require("./.env.json");
+const pkg = require("./package.json")
+const env = require("./.env.json")
 
 // Object Creations
 const client = new Discord.Client({
-	owner: ["239031520587808769", "142796643589292032", "191255947648172033", "263541113913212929", "221740543045009408"],
-	commandPrefix: "!",
+	owner: ['239031520587808769', '142796643589292032', '191255947648172033', '263541113913212929', '221740543045009408'],
+	commandPrefix: '!',
 	disableEveryone: true,
 	unknownCommandResponse: false
-});
+})
 
 // Setup Logging
 client.logs = require("./libs/logs.js");
-
-// Attach other libraries.
-client.utils = new DiscordUtils(client);
 
 // client.on('error', (msg) => {client.logs.error(msg)})
 // client.on('warn', (msg) => {client.logs.warn(msg)})
