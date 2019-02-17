@@ -1,4 +1,6 @@
 const Command = require("discord.js-commando").Command
+const [Attachment, Permissions]= require("discord.js")
+const P = Permissions.FLAGS
 
 module.exports = class NiceCommand extends Command {
 	constructor(client) {
@@ -7,11 +9,13 @@ module.exports = class NiceCommand extends Command {
 			group: 'util',
 			memberName: 'nice',
 			description: '*nice*',
+			clientPermissions: [P.MANAGE_MESSAGES],
 		});
 	}
 
 	async run(msg, args){
-		// console.log("running")
-		return msg.channel.send("https://cdn.discordapp.com/attachments/539928445984178201/541373345644544020/weflip-thumbsup_904.png")
+		await msg.delete()
+		return msg.channel.send(new Attachment("https://cdn.discordapp.com/attachments/539928445984178201/541373345644544020/weflip-thumbsup_904.png"))
+
 	}
-};
+}
