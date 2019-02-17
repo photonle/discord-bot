@@ -12,7 +12,7 @@ module.exports = class NiceCommand extends Command {
 		});
 	}
 
-	async run(msg, args){
+	async run(msg, args, _){
 		await msg.delete()
 		return msg.channel.send(new Attachment("https://cdn.discordapp.com/attachments/539928445984178201/541373345644544020/weflip-thumbsup_904.png"))
 
