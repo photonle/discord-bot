@@ -1,6 +1,5 @@
 const Command = require("discord.js-commando").Command
-const {Attachment, Permissions} = require("discord.js")
-const P = Permissions.FLAGS
+const {Attachment} = require("discord.js")
 
 module.exports = class NiceCommand extends Command {
 	constructor(client) {
@@ -9,7 +8,7 @@ module.exports = class NiceCommand extends Command {
 			group: 'util',
 			memberName: 'nice',
 			description: '*nice*',
-			clientPermissions: [P.MANAGE_MESSAGES],
+			clientPermissions: ['MANAGE_MESSAGES'],
 		});
 	}
 
