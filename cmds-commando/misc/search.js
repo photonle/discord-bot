@@ -19,10 +19,10 @@ module.exports = class PurgeCommand extends Command {
 					max: 200
 				},
 			]
-		});
+		})
 	}
 
-	async run(msg, args){
+	async run(msg, args, _){
 		let url = "https://lmgtfy.com/?q="
 
 		if (args.term === '^'){
@@ -36,4 +36,4 @@ module.exports = class PurgeCommand extends Command {
 			msg.reply(`<${url}${query}>`)
 		}
 	}
-};
+}
