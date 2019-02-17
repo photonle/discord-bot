@@ -4,3 +4,4 @@ bot-logs
 Dockerfile
 .gitignore
 .dockerignore
+example.env.json
