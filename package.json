@@ -1,6 +1,6 @@
 {
   "name": "photon-bot",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "scripts": {
     "start": "node app.js"
@@ -8,9 +8,11 @@
   "dependencies": {
     "discord.js": "^11.3.2",
     "discord.js-commando": "0.10.0",
-    "erlpack": "0.1.2",
     "promise": "^8.0.2",
     "uws": "^9.14.0",
     "moment": "^2.24.0"
+  },
+  "devDependencies": {
+    "jsdoc": "^3.5.5"
   }
 }

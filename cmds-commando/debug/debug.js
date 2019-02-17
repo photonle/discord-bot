@@ -13,6 +13,12 @@ module.exports = class DebugCommand extends Command {
 		})
 	}
 
+	/**
+	 * @param {CommandMessage} msg The incoming message.
+	 * @param {Object|string|Array<string>} args The command arguments.
+	 * @param {boolean} _ If the incoming message is from a pattern match.
+	 * @returns {Promise<Message>}
+	 */
 	async run(msg, args, _){
 		let rich = new RichEmbed()
 
@@ -21,9 +27,9 @@ module.exports = class DebugCommand extends Command {
 
 		rich.addField("Version", `${pkg.name}@${pkg.version}`, true)
 		rich.addField("Uptime", Moment.duration(process.uptime(), 's').humanize(), true)
-		rich.addField("Latency", this.client.ping, true)
+		rich.addField("Latency", Math.round(this.client.ping), true)
 		rich.setColor([120, 120, 120])
 
 		return msg.channel.send("", rich)
 	}
-};
+}
