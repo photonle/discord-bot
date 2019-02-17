@@ -16,8 +16,8 @@ module.exports = class DebugCommand extends Command {
 		let rich = new RichEmbed()
 		let up = process.uptime()
 
-		rich.setAuthor("A bot by Doctor Internet", msg.client.users.get("239031520587808769").avatarURL, "https://limelightgaming.net/forums/user-2746.html")
-		rich.setDescription("Debug Information")
+		rich.setAuthor("Doctor Internet", msg.client.users.get("239031520587808769").avatarURL, "https://limelightgaming.net/forums/user-2746.html")
+		rich.setDescription(`A bot by Doctor Internet\nDebug Information`)
 
 		rich.addField("Version", `${pkg.name}@${pkg.version}`, true)
 		rich.addField("Uptime", up, true)
