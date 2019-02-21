@@ -68,7 +68,7 @@ class TextLogger extends Logger {
 
 			if (stat.isDirectory()){
 				let curdate = new Date()
-				let logname = `${this.path}/log-${curdate.getFullYear()}-${curdate.getMonth()}-${curdate.getDay()}.log`
+				let logname = `${this.path}/log-${curdate.getFullYear()}-${curdate.getMonth() + 1}-${curdate.getDate()}.log`
 
 				this.loghandler = fs.createWriteStream(logname, {flags: "a"})
 				this.ready = true
