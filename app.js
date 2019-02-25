@@ -34,7 +34,7 @@ client.registry.registerGroups([
 ])
 client.registry.registerDefaults()
 // client.registry.registerTypesIn(__dirname + "/types")
-client.registry.registerCommandsIn(__dirname + "/cmds-commando")
+client.registry.registerCommandsIn(__dirname + "/cmds")
 
 
 client.on('ready', () => {
@@ -50,6 +50,7 @@ let untaggable_roles = new Set(["479485006209613839"])
 let no_tag_channels = new Set(["479487537006510086", "517411139374547016"])
 let support = new Set(["479485006209613839", "479485091710631936", "517410625203470349"])
 let warned = new Set()
+
 client.on('typingStart', (channel, user) => {
 	let id = channel.id
 	let gm = channel.guild.member(user)
