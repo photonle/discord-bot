@@ -1,44 +1,34 @@
-// Third Party Libs
 const Discord = require("discord.js-commando")
 const http = require("https")
 
-// Configs
 const pkg = require("./package.json")
 const env = require("./.env.json")
 
-// Object Creations
 const client = new Discord.Client({
 	owner: ['239031520587808769', '142796643589292032', '191255947648172033', '263541113913212929', '221740543045009408'],
 	commandPrefix: '!',
 	disableEveryone: true,
 	unknownCommandResponse: false
 })
+client.logs = require("./libs/logs.js")
 
-// Setup Logging
-client.logs = require("./libs/logs.js");
-
-// client.on('error', (msg) => {client.logs.error(msg)})
-// client.on('warn', (msg) => {client.logs.warn(msg)})
-// client.on('debug', (msg) => {client.logs.log(msg)})
-// client.on('disconnect', () => {client.logs.warn('Disconnected from socket.')})
-// client.on('reconnecting', () => {client.logs.warn('Reconnecting to discord.')})
-
-// File Constants
-const token = env.authtoken;
+client.on('error', client.logs.error)
+client.on('warn', client.logs.warn)
+client.on('disconnect', () => {client.logs.warn('Disconnected from socket.')})
+client.on('reconnecting', () => {client.logs.warn('Reconnecting to discord.')})
 
 client.registry.registerGroups([
-	['ban', 'Banishment'],
 	['debug', 'Debugging'],
 	['docs', 'Documentation'],
-	['misc', 'Miscellaneous']
+	['misc', 'Miscellaneous'],
+	['help', 'Help'],
 ])
 client.registry.registerDefaults()
-// client.registry.registerTypesIn(__dirname + "/types")
 client.registry.registerCommandsIn(__dirname + "/cmds")
 
 
 client.on('ready', () => {
-	client.generateInvite().then((link) => {console.log(link)});
+	client.generateInvite().then(() => console.log)
 	client.user.setActivity("VCMod.", {type: 'PLAYING'});
 	client.logs.log("Loaded Version " + pkg.version);
 });
@@ -109,7 +99,7 @@ http.get("https://samuelmaddock.github.io/glua-docs/data/glua.json", function(re
 })
 
 // Log our bot in
-client.login(token);
+client.login(env.authtoken)
 
-process.on('uncaughtException', console.error)
+process.on('uncaughtException', (e) => {console.error(e); process.exit(1)})
 process.on('unhandledRejection', console.error)
