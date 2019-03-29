@@ -83,7 +83,6 @@ client.on('message', (message) => {
 	if (mentions.roles && mentions.roles.some((role) => untaggable_roles.has(role.id))){
 		channel.send(`Hey ${message.author.toString()}. Are you sure you need to tag the core dev team members?`)
 		message.delete()
-		return
 	}
 })
 
