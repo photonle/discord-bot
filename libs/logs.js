@@ -106,19 +106,19 @@ class TextLogger extends Logger {
 
 module.exports = new TextLogger("/app/bot-logs")
 
-console.log = function(...rest){
-	for (let line of rest){
-		module.exports.log(line.toString())
-	}
-}
-console.warn = function(...rest){
-	for (let line of rest){
-		module.exports.warn(line.toString())
-	}
-}
-
-console.error = function(...rest){
-	for (let line of rest){
-		module.exports.error(line.toString())
-	}
-}
+// console.log = function(...rest){
+// 	for (let line of rest){
+// 		module.exports.log(line.toString())
+// 	}
+// }
+// console.warn = function(...rest){
+// 	for (let line of rest){
+// 		module.exports.warn(line.toString())
+// 	}
+// }
+//
+// console.error = function(...rest){
+// 	for (let line of rest){
+// 		module.exports.error(line.toString())
+// 	}
+// }
