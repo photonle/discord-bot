@@ -99,7 +99,7 @@ client.on('message', (message) => {
 // })
 
 let cmd = client.registry.commands.get("glua")
-if (cmd){cmd.dataTable = require('./ibs/glua.json')}
+if (cmd){cmd.dataTable = require('./libs/glua.json')}
 
 // Log our bot in
 client.login(env.authtoken)
