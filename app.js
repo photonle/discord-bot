@@ -57,7 +57,12 @@ function writeSet(file, set){
 }
 
 function readLines(file, func){
-	let input = fs.createReadStream(file, {encoding: 'utf8'})
+	try {
+		let input = fs.createReadStream(file, {encoding: 'utf8'})
+	} catch {
+		return
+	}
+
 	let remaining = '';
 
 	input.on('data', function(data) {
