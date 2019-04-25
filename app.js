@@ -1,5 +1,6 @@
 const Discord = require("discord.js-commando")
 const http = require("https")
+const fs = require("fs")
 
 const pkg = require("./package.json")
 const env = require("./.env.json")
@@ -41,7 +42,77 @@ let no_tag_channels = new Set(["479487537006510086", "517411139374547016"])
 let support = new Set(["479485006209613839", "479485091710631936", "517410625203470349"])
 let warned = new Set()
 
-client.on('typingStart', (channel, user) => {
+function readLines(input, func) {
+	let remaining = '';
+
+	input.on('data', (data) => {
+		remaining += data
+
+		let idx = remaining.indexOf('\n')
+		let lst = 0
+
+		while (idx > -1){
+			let line = remaining.substring(lst, idx)
+			lst = idx + 1
+
+			func(line)
+		}
+
+		remaining = remaining.substring(lst);
+	})
+
+	input.on('end', function() {
+		if (remaining.length > 0) {
+			func(remaining)
+		}
+	})
+}
+
+let locked_warn = false
+function writeSet(file, set){
+	if (locked_warn){return}
+	locked_warn = true
+
+	try {
+		let str = fs.createWriteStream(file)
+		for (let obj of set){str.write(obj.toString())}
+	} finally {
+		str.close()
+		locked_warn = false
+	}
+}
+
+function readLines(file, func){
+	let input = fs.createReadStream(file, {encoding: 'utf8'})
+	let remaining = '';
+
+	input.on('data', function(data) {
+		remaining += data
+		let index = remaining.indexOf('\n')
+		let last  = 0
+
+		while (index > -1) {
+			let line = remaining.substring(last, index)
+			last = index + 1
+			func(line)
+			index = remaining.indexOf('\n', last)
+		}
+
+		remaining = remaining.substring(last)
+	})
+
+	input.on('end', function() {
+		if (remaining.length > 0) {
+			func(remaining)
+		}
+	})
+}
+readLines('/app/warned', (id) => {
+	warned.add(id)
+})
+
+
+client.on('typingStart', async (channel, user) => {
 	let id = channel.id
 	let gm = channel.guild.member(user)
 	if (no_tag_channels.has(id) && !warned.has(user.id) && (!gm || !gm.roles.some((role) => {return support.has(role.id)}))){
@@ -56,6 +127,7 @@ To troubleshoot your issue on your own, please try the following:
 
 If none of the above has help fixed your issue, go ahead and tag one of the blue Support Team members and they will be with you shortly.`)
 		warned.add(user.id)
+		writeSet('/app/warned', warned)
 	}
 })
 
