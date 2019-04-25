@@ -49,7 +49,7 @@ function writeSet(file, set){
 
 	let str = fs.createWriteStream(file)
 	str.on('ready', () => {
-		for (let obj of set){str.write(obj.toString())}
+		for (let obj of set){str.write(obj.toString(); str.write('\n'))}
 		str.close()
 		locked_warn = false
 	})
