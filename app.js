@@ -42,32 +42,6 @@ let no_tag_channels = new Set(["479487537006510086", "517411139374547016"])
 let support = new Set(["479485006209613839", "479485091710631936", "517410625203470349"])
 let warned = new Set()
 
-function readLines(input, func) {
-	let remaining = '';
-
-	input.on('data', (data) => {
-		remaining += data
-
-		let idx = remaining.indexOf('\n')
-		let lst = 0
-
-		while (idx > -1){
-			let line = remaining.substring(lst, idx)
-			lst = idx + 1
-
-			func(line)
-		}
-
-		remaining = remaining.substring(lst);
-	})
-
-	input.on('end', function() {
-		if (remaining.length > 0) {
-			func(remaining)
-		}
-	})
-}
-
 let locked_warn = false
 function writeSet(file, set){
 	if (locked_warn){return}
