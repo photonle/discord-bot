@@ -47,25 +47,22 @@ function writeSet(file, set){
 	if (locked_warn){return}
 	locked_warn = true
 
-	try {
-		let str = fs.createWriteStream(file)
+	let str = fs.createWriteStream(file)
+	str.on('ready', () => {
 		for (let obj of set){str.write(obj.toString())}
-	} finally {
 		str.close()
 		locked_warn = false
-	}
+	})
+	str.on('error', () => {
+		locked_warn = false
+	})
 }
 
 function readLines(file, func){
-	let input
-	try {
-		input = fs.createReadStream(file, {encoding: 'utf8'})
-	} catch (err){
-		return
-	}
+	let input = fs.createReadStream(file, {encoding: 'utf8'})
+	input.on('error', (err) => {console.error(err)})
 
-	let remaining = '';
-
+	let remaining = ''
 	input.on('data', function(data) {
 		remaining += data
 		let index = remaining.indexOf('\n')
