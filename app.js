@@ -60,7 +60,7 @@ function readLines(file, func){
 	let input
 	try {
 		input = fs.createReadStream(file, {encoding: 'utf8'})
-	} catch {
+	} catch (err){
 		return
 	}
 
