@@ -30,7 +30,15 @@ client.registry.registerCommandsIn(__dirname + "/cmds")
 
 client.on('ready', () => {
 	client.generateInvite().then(() => console.log)
-	client.user.setActivity("VCMod.", {type: 'PLAYING'});
+	client.user.setPresence({
+		status: "online",
+		afk: false,
+		game: {
+			name: "VCMod",
+			url: "https://www.gmodstore.com/market/view/21",
+			type: "PLAYING"
+		}
+	});
 	client.logs.log("Loaded Version " + pkg.version);
 });
 
