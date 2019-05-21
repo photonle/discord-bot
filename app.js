@@ -125,7 +125,7 @@ client.on('message', (message) => {
 	let mentions = message.mentions
 	if (mentions.members && mentions.members.some((member) => untaggable_full.has(member.id)) && !untaggable.has(message.member.id)){
 		let usrs = mentions.members.filter((member) => untaggable_full.has(member.id))
-		let str = usrs.array().join(" or ")
+		let str = usrs.array().map(x => x.displayName).join(" or ")
 		let word = usrs.length === 1 ? "They're a busy person." : "They're busy people."
 		channel.send(`Hey ${message.author}, you don't really need to tag ${str}. ${word}.`)
 		message.delete()
