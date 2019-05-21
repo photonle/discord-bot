@@ -42,7 +42,7 @@ client.on('ready', () => {
 	client.logs.log("Loaded Version " + pkg.version);
 });
 
-let schmall = "142796643589292032"
+let untaggable_full = new Set(["142796643589292032", "221740543045009408", "263541113913212929"])
 let untaggable = new Set(["142796643589292032", "263541113913212929", "191255947648172033", "221740543045009408"])
 let untaggable_roles = new Set(["479485006209613839"])
 
@@ -123,8 +123,11 @@ client.on('message', (message) => {
 	let cid = channel.id
 
 	let mentions = message.mentions
-	if (mentions.members && mentions.members.some((member) => schmall === member.id) && !untaggable.has(message.member.id)){
-		channel.send(`Hey ${message.author.toString()}, you don't really need to tag schmal. He's a busy guy.`)
+	if (mentions.members && mentions.members.some((member) => untaggable_full.has(member.id)) && !untaggable.has(message.member.id)){
+		let usrs = mentions.members.filter((member) => untaggable_full.has(member.id))
+		let str = usrs.join(" or ")
+		let word = usrs.length === 1 ? "They're a busy person." : "They're busy people."
+		channel.send(`Hey ${message.author}, you don't really need to tag ${str}. ${word}.`)
 		message.delete()
 		return
 	}
