@@ -38,7 +38,10 @@ module.exports = class PathCommand extends Command {
 		}
 
 		matches = await Promise.all(matches.map(async x => {return {path: x.path, data: await db.all(SQL`SELECT path, owner, name, sid, sname FROM files INNER JOIN addons on files.owner = addons.wsid INNER JOIN authors ON addons.author = authors.sid WHERE path = ${x.path}`)}}))
-		// matches = matches.map(x => {x.path = x.path.replace(/\\/g, '/'); return x})
+		if (matches.length === 0){
+			return msg.say("I haven't seen that path before.")
+		}
+
 		matches = matches.map(x => {
 			let y = new Embed()
 			let i = 1
@@ -49,7 +52,6 @@ module.exports = class PathCommand extends Command {
 			return y
 		})
 		return Promise.all(matches.map(x => msg.say(x)))
-		// msg.say(`${matches[0].path}: ${matches[0].data}`)
 	}
 }
 
