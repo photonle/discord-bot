@@ -101,6 +101,7 @@ function build_rich(row){
 
 	let res = regex_header.exec(html)
 	let header = res[1]
+	msg.say(header)
 	let deprecated = regex_deprec.exec(html) ? "This function is deprecated and may be removed in a future version." : ""
 
 	let func_name = header.slice(0, header.indexOf("(")) + "("
