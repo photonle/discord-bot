@@ -6,8 +6,7 @@ module.exports = class SupportCommand extends Command {
 			name: 'support',
 			group: 'util',
 			memberName: 'support',
-			description: 'Send a small help message to a user giving basic support.',
-			clientPermissions: ['MANAGE_MESSAGES'],
+			description: 'Send a small help message to a user giving basic support.'
 		})
 	}
 
@@ -18,7 +17,6 @@ module.exports = class SupportCommand extends Command {
 	 * @returns {Promise<Message>}
 	 */
 	async run(msg, args, _){
-		await msg.delete()
 		return msg.channel.send(`Make sure you've read the pinned messages.
 Please try the following:
 	• Uninstall the last Photon addon you installed before your issue started to occur.
