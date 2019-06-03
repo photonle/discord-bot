@@ -46,7 +46,7 @@ module.exports = class GLuaCommand extends Command {
 		} else if (args.pos > matches.length) {
 			return msg.reply(`${args.pos} is out of range for your search, the maximum is ${matches.length}`)
 		} else {
-			return msg.say("", build_rich(matches[args.pos - 1], msg))
+			return msg.say("", build_rich(matches[args.pos - 1]))
 		}
 	}
 }
@@ -84,7 +84,7 @@ const state_cols = {
 	client: [211, 84, 0],
 	menu: [39, 174, 96]
 }
-function build_rich(row, msg){
+function build_rich(row){
 	const regex_header = /<div class="function_line">([\s\S]*?)<\/div>/g
 	const regex_deprec = /<div class="deprecatedfunc">/g
 
