@@ -109,11 +109,13 @@ function build_rich(row){
 	let func_name_test, func_arg_name, func_class
 	let arg_num = 0
 
-	while ((func_name_test = regex_func.exec(header)) !== null){
+	func_name_test = regex_func.exec(header)
+	while (func_name_test !== null){
 		func_class = regex_class.exec(header)[2]
 		func_arg_name = func_name_test[1]
 		func_name += `*${func_class}* ${func_arg_name}, `
 		arg_num++
+		func_name_test = regex_func.exec(header)
 	}
 	if (arg_num !== 0){func_name = func_name .slice(0, -2)}
 	func_name += ")"
