@@ -1,6 +1,5 @@
 const sqlite = require("sqlite")
-const db = sqlite.open("/app/photon.read.db")
-
+let db
 const SQL = require('sql-template-strings')
 const Command = require("discord.js-commando").Command
 
@@ -25,3 +24,8 @@ module.exports = class GLuaCommand extends Command {
 		msg.say(`${matches}`)
 	}
 }
+
+async function main(){
+	db = await sqlite.open("/app/photon.read.db")
+}
+main()
