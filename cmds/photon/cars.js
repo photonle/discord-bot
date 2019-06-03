@@ -10,7 +10,7 @@ module.exports = class CarCommand extends Command {
 			name: 'cars',
 			group: 'util',
 			memberName: 'cars',
-			description: 'Advanced search for lua paths used in photon addons.',
+			description: 'Advanced search for vehicle names used in photon addons.',
 			args: [{
 				key: 'path',
 				label: 'Search Path',
