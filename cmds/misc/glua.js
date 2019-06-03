@@ -39,14 +39,14 @@ module.exports = class GLuaCommand extends Command {
 		if (args.pos === 0){
 			let reply = build_upto(matches, function(table, index){return `${index + 1}: ${table[index].title}`}, 1500)
 			if (reply){
-				return msg.reply(`\n${reply}`)
+				return msg.say(`${reply}`)
 			} else {
 				return msg.reply(`there are ${matches.length} matching articles. Please narrow your search.`)
 			}
 		} else if (args.pos > matches.length) {
 			return msg.reply(`${args.pos} is out of range for your search, the maximum is ${matches.length}`)
 		} else {
-			return msg.channel.send("", build_rich(matches[args.pos - 1]))
+			return msg.say("", build_rich(matches[args.pos - 1], msg))
 		}
 	}
 }
@@ -84,7 +84,7 @@ const state_cols = {
 	client: [211, 84, 0],
 	menu: [39, 174, 96]
 }
-function build_rich(row){
+function build_rich(row, msg){
 	const regex_header = /<div class="function_line">([\s\S]*?)<\/div>/g
 	const regex_deprec = /<div class="deprecatedfunc">/g
 
