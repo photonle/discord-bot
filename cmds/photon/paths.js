@@ -37,7 +37,7 @@ module.exports = class PathCommand extends Command {
 			matches = await db.all(SQL`SELECT path, COUNT(*) as count FROM files WHERE path LIKE ${args.path} GROUP BY path`)
 		}
 
-		matches = await Promise.all(matches.map(async x => {return {path: x.path, data: await db.all(SQL`SELECT path, owner, name, CAST(sid AS TEXT), sname FROM files INNER JOIN addons on files.owner = addons.wsid INNER JOIN authors ON addons.author = authors.sid WHERE path = ${x.path}`)}}))
+		matches = await Promise.all(matches.map(async x => {return {path: x.path, data: await db.all(SQL`SELECT path, owner, name, CAST(sid AS TEXT) as sid, sname FROM files INNER JOIN addons on files.owner = addons.wsid INNER JOIN authors ON addons.author = authors.sid WHERE path = ${x.path}`)}}))
 		if (matches.length === 0){
 			return msg.say("I haven't seen that path before.")
 		}
