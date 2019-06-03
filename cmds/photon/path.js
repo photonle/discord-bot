@@ -1,5 +1,5 @@
 const sqlite = require("sqlite")
-const db = sqlite.open("/app/photon.sqlite")
+const db = sqlite.open("/app/photon.read.db")
 
 const SQL = require('sql-template-strings')
 const Command = require("discord.js-commando").Command
