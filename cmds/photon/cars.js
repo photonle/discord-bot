@@ -24,7 +24,7 @@ module.exports = class CarCommand extends Command {
 		msg.say(`Searching for ${args.path} in addons.`)
 		let matches = await db.all(SQL`SELECT cname as path, COUNT(*) as count FROM cars WHERE cname = ${args.path} GROUP BY cname`)
 
-		matches = await Promise.all(matches.map(async x => {return {path: x.path, data: await db.all(SQL`SELECT cname as path, owner, name, sid, sname FROM cars INNER JOIN addons on cars.owner = addons.wsid INNER JOIN authors ON addons.author = authors.sid WHERE cname = ${x.path}`)}}))
+		matches = await Promise.all(matches.map(async x => {return {path: x.path, data: await db.all(SQL`SELECT cname as path, owner, name, CAST(sid AS TEXT), sname FROM cars INNER JOIN addons on cars.owner = addons.wsid INNER JOIN authors ON addons.author = authors.sid WHERE cname = ${x.path}`)}}))
 		matches = matches.map(x => {
 			let y = new Embed()
 			let i = 1
