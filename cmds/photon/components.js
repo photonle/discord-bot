@@ -22,7 +22,7 @@ module.exports = class ComponentCommand extends Command {
 
 	async run(msg, args, _){
 		msg.say(`Searching for ${args.path} in addons.`)
-		let matches = await db.all(SQL`SELECT cname as path, COUNT(*) as count FROM cars WHERE cname = ${args.path} GROUP BY cname`)
+		let matches = await db.all(SQL`SELECT cname as path, COUNT(*) as count FROM components WHERE cname = ${args.path} GROUP BY cname`)
 
 		matches = await Promise.all(matches.map(async x => {return {path: x.path, data: await db.all(SQL`SELECT cname as path, owner, name, sid, sname FROM components INNER JOIN addons on components.owner = addons.wsid INNER JOIN authors ON addons.author = authors.sid WHERE cname = ${x.path}`)}}))
 		matches = matches.map(x => {
