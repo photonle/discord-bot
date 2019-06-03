@@ -1,3 +1,5 @@
+const Command = require("discord.js-commando").Command
+
 module.exports = class SearchCommand extends Command {
 	constructor(client) {
 		super(client, {
@@ -36,5 +38,3 @@ module.exports = class SearchCommand extends Command {
 		return msg.reply(`<${this.url}${query}>`)
 	}
 }
-
-const Command = require("discord.js-commando").Command
