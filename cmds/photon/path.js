@@ -24,3 +24,4 @@ module.exports = class GLuaCommand extends Command {
 		let matches = await db.all(SQL`SELECT * FROM files WHERE path = ${args.path}`)
 		msg.say(`${matches}`)
 	}
+}
