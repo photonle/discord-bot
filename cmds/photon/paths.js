@@ -45,7 +45,7 @@ module.exports = class PathCommand extends Command {
 		matches = matches.map(x => {
 			let y = new Embed()
 			let i = 1
-			y.setAuthor(x.path.replace(/\\/g, '/'))
+			y.setAuthor(`Path Report: ${x.path.replace(/\\/g, '/')}`)
 			for (let addon of x.data){
 				y.addField(`Addon ${i++}`, `[${addon.name.replace(/([\[\]])/g, '\$1')}](https://steamcommunity.com/sharedfiles/filedetails/?id=${addon.owner}) by [${addon.sname.replace(/([\[\]])/g, '\$1')}](https://steamcommunity.com/profiles/${addon.sid})`)
 			}
