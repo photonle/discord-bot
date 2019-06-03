@@ -23,6 +23,7 @@ client.registry.registerGroups([
 	['docs', 'Documentation'],
 	['misc', 'Miscellaneous'],
 	['help', 'Help'],
+	['photon', 'PLE Integration']
 ])
 client.registry.registerDefaults()
 client.registry.registerCommandsIn(__dirname + "/cmds")
