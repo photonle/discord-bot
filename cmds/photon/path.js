@@ -39,6 +39,8 @@ module.exports = class PathCommand extends Command {
 
 		if (matches.length === 0){
 			return msg.say("I haven't seen that path before.")
+		} else if (matches.length > 10) {
+			return msg.say("Please refine your search term.")
 		} else {
 			matches = matches.map(x => {x.path = x.path.replace(/\\/g, '/'); return x})
 			return Promise.all(matches.map(x => msg.say(`\`${x.path}\` has been used in ${x.count} ${x.count === 1 ? 'addon' : 'addons'} that I've seen.`)))

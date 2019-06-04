@@ -40,6 +40,8 @@ module.exports = class PathCommand extends Command {
 		matches = await Promise.all(matches.map(async x => {return {path: x.path, data: await db.all(SQL`SELECT path, owner, name, CAST(sid AS TEXT) as sid, sname FROM files INNER JOIN addons on files.owner = addons.wsid INNER JOIN authors ON addons.author = authors.sid WHERE path = ${x.path}`)}}))
 		if (matches.length === 0){
 			return msg.say("I haven't seen that path before.")
+		} else if (matches.length > 10) {
+			return msg.say("Please refine your search term.")
 		}
 
 		matches = matches.map(x => {
