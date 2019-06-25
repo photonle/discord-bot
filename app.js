@@ -146,6 +146,36 @@ client.on('message', (message) => {
 		message.delete()
 	}
 })
+client.on('messageUpdate', (old, message) => {
+	if (message.author.bot){return}
+
+	let channel = message.channel
+	let cid = channel.id
+
+	let mentions = message.mentions
+	if (mentions.members && mentions.members.some((member) => untaggable_full.has(member.id)) && !untaggable.has(message.member.id)){
+		let usrs = mentions.members.filter((member) => untaggable_full.has(member.id))
+		let str = usrs.array().map(x => x.displayName).join(" or ")
+		let word = usrs.size === 1 ? "They're a busy person." : "They're busy people."
+		channel.send(`Hey ${message.author}, you don't really need to tag ${str}. ${word}`)
+		message.delete()
+		return
+	}
+
+	if (!no_tag_channels.has(cid)){return}
+	if (!message.member || message.member.roles.some((role) => {return support.has(role.id)})){return}
+
+	if (mentions.members && mentions.members.some((member) => untaggable.has(member.id))){
+		channel.send(`Hey ${message.author.toString()}. Are you sure you need to tag the core dev team members?`)
+		message.delete()
+		return
+	}
+	if (mentions.roles && mentions.roles.some((role) => untaggable_roles.has(role.id))){
+		channel.send(`Hey ${message.author.toString()}. Are you sure you need to tag the core dev team members?`)
+		message.delete()
+	}
+})
+
 
 // http.get("https://samuelmaddock.github.io/glua-docs/data/glua.json", function(res){
 // 	let body = "";
