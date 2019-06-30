@@ -176,19 +176,6 @@ client.on('messageUpdate', (old, message) => {
 	}
 })
 
-
-// http.get("https://samuelmaddock.github.io/glua-docs/data/glua.json", function(res){
-// 	let body = "";
-// 	res.on("data", function(chunk){body += chunk.toString();});
-// 	res.on("end", () => {
-// 		let cmd = client.registry.commands.get("glua")
-// 		if (cmd){
-// 			console.log(body)
-// 			cmd.dataTable = JSON.parse(body)
-// 		}
-// 	})
-// })
-
 let cmd = client.registry.commands.get("glua")
 if (cmd){cmd.dataTable = require('./libs/glua.json')}
 
