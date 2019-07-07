@@ -27,7 +27,7 @@ module.exports = class CarCommand extends Command {
 		if (matches.length === 0){
 			return msg.say("I haven't seen that vehicle name before.")
 		} else {
-			matches = matches.map(x => `\`${x.path.replace(/`/, '\\`')}\` has been used in ${x.count} ${x.count === 1 ? 'addon' : 'addons'} that I've seen.`).join("\n")
+			matches = matches.map(x => `\`${x.path.replace(/`/, '\\`')}\` has been used in ${x.count} ${x.count === 1 ? 'addon' : 'addons'} that I've seen.`).join("\n\n")
 			if (matches.length > 1800){
 				return msg.say("Please be more specific.")
 			} else {
