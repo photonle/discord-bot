@@ -27,30 +27,20 @@ module.exports = class CarCommand extends Command {
 		matches = matches.filter(x => x.count > 0)
 		if (matches.length === 0){return (await reply).edit("I haven't seen that car name before.")}
 
-		matches = await Promise.all(
-			matches.map(async x => {
-				return {
-					path: x.path,
-					data: await db.all(SQL`SELECT cname as path, owner, name, CAST(sid AS TEXT) as sid, sname FROM cars INNER JOIN addons on cars.owner = addons.wsid INNER JOIN authors ON addons.author = authors.sid WHERE cname = ${x.path}`)
-				}
-			})
-		)
+		let match = matches[0]
+		let data = db.all(SQL`SELECT cname as path, owner, name, CAST(sid AS TEXT) as sid, sname FROM cars INNER JOIN addons on cars.owner = addons.wsid INNER JOIN authors ON addons.author = authors.sid WHERE cname = ${x.path}`)
 
-		let embeds = matches.map(match => {
-			let embed = new Embed()
-			let i = 1
-			embed.setAuthor(`Vehicle Report: ${match.path}`)
-			match.data.map(addon =>
-				embed.addField(
-					`Addon ${i++}`,
-					`[${addon.name.replace(/([\[\]])/g, '\$1')}](https://steamcommunity.com/sharedfiles/filedetails/?id=${addon.owner}) by [${addon.sname.replace(/([\[\]])/g, '\$1')}](https://steamcommunity.com/profiles/${addon.sid})`
-				)
+		let embed = new Embed(), i = 1
+		embed.setTitle(`Vehicle Report: ${match.path}`)
+
+		(await data).map(addon => {
+			embed.addField(
+				`Addon ${i++}`,
+				`[${addon.name.replace(/([\[\]])/g, '\$1')}](https://steamcommunity.com/sharedfiles/filedetails/?id=${addon.owner}) by [${addon.sname.replace(/([\[\]])/g, '\$1')}](https://steamcommunity.com/profiles/${addon.sid})`
 			)
-			return embed
 		})
 
-		reply = await reply
-		return Promise.all(matches.map(x => reply.say(x)))
+		return (await reply).edit(embed)
 	}
 }
 
