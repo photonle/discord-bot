@@ -30,7 +30,8 @@ module.exports = class CarCommand extends Command {
 		let match = matches[0]
 		let data = db.all(SQL`SELECT cname as path, owner, name, CAST(sid AS TEXT) as sid, sname FROM cars INNER JOIN addons on cars.owner = addons.wsid INNER JOIN authors ON addons.author = authors.sid WHERE cname = ${match.path}`)
 
-		let embed = new Embed(), i = 1
+		let i = 1
+		let embed = new Embed()
 		embed.setTitle(`Vehicle Report: ${match}`)
 
 		(await data).map(addon => {
