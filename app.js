@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const Discord = require("discord.js-commando")
 const http = require("https")
 const fs = require("fs")
@@ -180,7 +182,7 @@ let cmd = client.registry.commands.get("glua")
 if (cmd){cmd.dataTable = require('./libs/glua.json')}
 
 // Log our bot in
-client.login(env.authtoken)
+client.login(process.env.DISCORD_TOKEN)
 
 process.on('uncaughtException', (e) => {console.error(e); process.exit(1)})
 process.on('unhandledRejection', console.error)
