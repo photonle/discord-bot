@@ -1,6 +1,6 @@
 ---
 name: Feature Request
-about: Suggest ideas for Photon
+about: Suggest ideas for the bot
 title: ''
 labels: feature
 assignees: ''

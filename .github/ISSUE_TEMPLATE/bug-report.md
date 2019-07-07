@@ -23,5 +23,4 @@ assignees: ''
   3. 
 
 ## Details
-- Source (Workshop / Github):	
-- Garry's Mod Beta/Branch (if not standard):
+- Version (from !debug):
