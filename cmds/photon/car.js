@@ -24,6 +24,7 @@ module.exports = class CarCommand extends Command {
 
 		args.path = `%${args.path}%`
 		let matches = await db.all(SQL`SELECT cname as path, COUNT(*) as count FROM cars WHERE cname LIKE ${args.path} GROUP BY cname`)
+		await reply
 		if (matches.length === 0){
 			return reply.edit("I haven't seen that vehicle name before.")
 		} else {
