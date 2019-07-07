@@ -20,18 +20,18 @@ module.exports = class CarCommand extends Command {
 	}
 
 	async run(msg, args, _){
-		msg.say(`Searching for ${args.path} in addons.`)
-		args.path = `%${args.path}%`
+		let reply = msg.say(`Searching for ${args.path} in addons.`)
 
+		args.path = `%${args.path}%`
 		let matches = await db.all(SQL`SELECT cname as path, COUNT(*) as count FROM cars WHERE cname LIKE ${args.path} GROUP BY cname`)
 		if (matches.length === 0){
-			return msg.say("I haven't seen that vehicle name before.")
+			return reply.edit("I haven't seen that vehicle name before.")
 		} else {
 			matches = matches.map(x => `\`${x.path.replace(/`/, '\\`')}\` has been used in ${x.count} ${x.count === 1 ? 'addon' : 'addons'} that I've seen.`).join("\n\n")
 			if (matches.length > 1800){
-				return msg.say("Please be more specific.")
+				return reply.edit("Please be more specific.")
 			} else {
-				return msg.say(matches)
+				return reply.edit(matches)
 			}
 			// return Promise.all(matches.map(x => msg.say(`\`${x.path.replace(/`/, '\\`')}\` has been used in ${x.count} ${x.count === 1 ? 'addon' : 'addons'} that I've seen.`)))
 		}
