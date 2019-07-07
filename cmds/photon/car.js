@@ -34,7 +34,6 @@ module.exports = class CarCommand extends Command {
 			} else {
 				return reply.edit(matches)
 			}
-			// return Promise.all(matches.map(x => msg.say(`\`${x.path.replace(/`/, '\\`')}\` has been used in ${x.count} ${x.count === 1 ? 'addon' : 'addons'} that I've seen.`)))
 		}
 	}
 }
