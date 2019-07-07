@@ -25,6 +25,7 @@ module.exports = class CarCommand extends Command {
 
 		let matches = await db.all(SQL`SELECT cname as path, COUNT(*) as count FROM cars WHERE cname = ${args.path} GROUP BY cname`)
 
+		matches.map(msg.say)
 		matches = matches.filter(x => x.count > 0)
 		if (matches.length === 0){return (await reply).edit("I haven't seen that car name before.")}
 
