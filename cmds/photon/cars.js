@@ -2,7 +2,7 @@ const sqlite = require("sqlite")
 let db
 const SQL = require('sql-template-strings')
 const Command = require("discord.js-commando").Command
-const RichEmbed = require('discord.js').RichEmbed
+const Embed = require('discord.js').RichEmbed
 
 module.exports = class CarCommand extends Command {
 	constructor(client) {
@@ -31,10 +31,10 @@ module.exports = class CarCommand extends Command {
 		let data = db.all(SQL`SELECT cname as path, owner, name, CAST(sid AS TEXT) as sid, sname FROM cars INNER JOIN addons on cars.owner = addons.wsid INNER JOIN authors ON addons.author = authors.sid WHERE cname = ${match.path}`)
 
 		let i = 1
-		let embed = new RichEmbed()
-		embed.setTitle(`Vehicle Report: ${match}`)
+		let embed = new Embed()
+		embed.setTitle(`Vehicle Report: ${match.path}`)
 
-		(await data).map(addon => {
+		;(await data).map(addon => {
 			embed.addField(
 				`Addon ${i++}`,
 				`[${addon.name.replace(/([\[\]])/g, '\$1')}](https://steamcommunity.com/sharedfiles/filedetails/?id=${addon.owner}) by [${addon.sname.replace(/([\[\]])/g, '\$1')}](https://steamcommunity.com/profiles/${addon.sid})`
