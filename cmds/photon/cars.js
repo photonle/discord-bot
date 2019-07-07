@@ -42,7 +42,7 @@ module.exports = class CarCommand extends Command {
 			let i = 1
 			embed.setAuthor(`Vehicle Report: ${x.path}`)
 			match.data.map(addon =>
-				y.addField(
+				embed.addField(
 					`Addon ${i++}`,
 					`[${addon.name.replace(/([\[\]])/g, '\$1')}](https://steamcommunity.com/sharedfiles/filedetails/?id=${addon.owner}) by [${addon.sname.replace(/([\[\]])/g, '\$1')}](https://steamcommunity.com/profiles/${addon.sid})`
 				)
