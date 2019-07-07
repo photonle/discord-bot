@@ -28,6 +28,7 @@ module.exports = class CarCommand extends Command {
 		matches = matches.filter(x => x.count > 0)
 		if (matches.length === 0){return (await reply).edit("I haven't seen that car name before.")}
 
+		msg.say("got to #1")
 		matches = await Promise.all(
 			matches.map(async x => {
 				return {
@@ -37,6 +38,7 @@ module.exports = class CarCommand extends Command {
 			})
 		)
 
+		msg.say("got to #2")
 		let embeds = matches.map(match => {
 			let embed = new Embed()
 			let i = 1
@@ -50,6 +52,7 @@ module.exports = class CarCommand extends Command {
 			return embed
 		})
 
+		msg.say("got to #3")
 		reply = await reply
 		return Promise.all(matches.map(x => reply.say(x)))
 	}
