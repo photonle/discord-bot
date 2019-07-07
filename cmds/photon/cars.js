@@ -24,14 +24,14 @@ module.exports = class CarCommand extends Command {
 		let reply = msg.say(`Searching for \`${args.path.replace(/`/, '\`')}\` in addons.`)
 		let matches = await db.all(SQL`SELECT cname as path, COUNT(*) as count FROM cars WHERE cname = ${args.path} GROUP BY cname`)
 
-		matches = matches.filter(x => x.count > 0)
+		matches = matches.filter(result => result.count > 0)
 		if (matches.length === 0){return (await reply).edit("I haven't seen that car name before.")}
 
 		let match = matches[0]
-		let data = db.all(SQL`SELECT cname as path, owner, name, CAST(sid AS TEXT) as sid, sname FROM cars INNER JOIN addons on cars.owner = addons.wsid INNER JOIN authors ON addons.author = authors.sid WHERE cname = ${x.path}`)
+		let data = db.all(SQL`SELECT cname as path, owner, name, CAST(sid AS TEXT) as sid, sname FROM cars INNER JOIN addons on cars.owner = addons.wsid INNER JOIN authors ON addons.author = authors.sid WHERE cname = ${match.path}`)
 
 		let embed = new Embed(), i = 1
-		embed.setTitle(`Vehicle Report: ${match.path}`)
+		embed.setTitle(`Vehicle Report: ${match}`)
 
 		(await data).map(addon => {
 			embed.addField(
