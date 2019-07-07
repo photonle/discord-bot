@@ -40,7 +40,7 @@ module.exports = class CarCommand extends Command {
 		let embeds = matches.map(match => {
 			let embed = new Embed()
 			let i = 1
-			embed.setAuthor(`Component Report: ${x.path}`)
+			embed.setAuthor(`Component Report: ${match.path}`)
 			match.data.map(addon =>
 				embed.addField(
 					`Addon ${i++}`,
