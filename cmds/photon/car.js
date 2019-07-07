@@ -20,7 +20,7 @@ module.exports = class CarCommand extends Command {
 	}
 
 	async run(msg, args, _){
-		let reply = msg.say(`Searching for `${args.path.replace(/`/, '\`')}` in addons.`)
+		let reply = msg.say(`Searching for \`${args.path.replace(/`/, '\`')}\` in addons.`)
 
 		args.path = `%${args.path}%`
 		let matches = await db.all(SQL`SELECT cname as path, COUNT(*) as count FROM cars WHERE cname LIKE ${args.path} GROUP BY cname`)
