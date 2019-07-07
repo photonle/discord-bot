@@ -32,7 +32,8 @@ module.exports = class CarCommand extends Command {
 
 		let i = 1
 		let embed = new Embed()
-		embed.setAuthor(`Vehicle Report: ${match}`)
+		console.log(embed)
+		embed.setTitle(`Vehicle Report: ${match}`)
 
 		(await data).map(addon => {
 			embed.addField(
