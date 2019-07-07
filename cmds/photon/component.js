@@ -20,13 +20,20 @@ module.exports = class ComponentCommand extends Command {
 	}
 
 	async run(msg, args, _){
-		msg.say(`Searching for ${args.path} in addons.`)
-		let matches = await db.all(SQL`SELECT cname as path, COUNT(*) as count FROM components WHERE cname = ${args.path} GROUP BY cname`)
+		let reply = msg.say(`Searching for \`${args.path.replace(/`/, '\`')}\` in addons.`)
 
+		args.path = `%${args.path}%`
+		let matches = await db.all(SQL`SELECT cname as path, COUNT(*) as count FROM components WHERE cname LIKE ${args.path} GROUP BY cname`)
+		reply = await reply
 		if (matches.length === 0){
-			return msg.say("I haven't seen that component name before.")
+			return reply.edit("I haven't seen that component name before.")
 		} else {
-			return Promise.all(matches.map(x => msg.say(`\`${x.path.replace(/`/, '\\`')}\` has been used in ${x.count} ${x.count === 1 ? 'addon' : 'addons'} that I've seen.`)))
+			matches = matches.map(x => `\`${x.path.replace(/`/, '\\`')}\` has been used in ${x.count} ${x.count === 1 ? 'addon' : 'addons'} that I've seen.`).join("\n\n")
+			if (matches.length > 1800){
+				return reply.edit("Please be more specific.")
+			} else {
+				return reply.edit(matches)
+			}
 		}
 	}
 }
