@@ -4,7 +4,7 @@ const SQL = require('sql-template-strings')
 const Command = require("discord.js-commando").Command
 const Embed = require('discord.js').RichEmbed
 
-module.exports = class CarCommand extends Command {
+module.exports = class ComponentsCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'components',
@@ -25,7 +25,7 @@ module.exports = class CarCommand extends Command {
 		let matches = await db.all(SQL`SELECT cname as path, COUNT(*) as count FROM components WHERE cname = ${args.path} GROUP BY cname`)
 
 		matches = matches.filter(result => result.count > 0)
-		if (matches.length === 0){return (await reply).edit("I haven't seen that car name before.")}
+		if (matches.length === 0){return (await reply).edit("I haven't seen that component name before.")}
 
 		let match = matches[0]
 		let data = db.all(SQL`SELECT cname as path, owner, name, CAST(sid AS TEXT) as sid, sname FROM components INNER JOIN addons on components.owner = addons.wsid INNER JOIN authors ON addons.author = authors.sid WHERE cname = ${match.path}`)
