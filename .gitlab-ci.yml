@@ -21,8 +21,7 @@ before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
 
 after_script:
-  - define SSH_AGENT_PID=$(cat /tmp/agent-${CI_JOB_ID})
-  - ssh-agent -k
+  - SSH_AGENT_PID=$(cat /tmp/agent-${CI_JOB_ID}) ssh-agent -k
 
 build:
   stage: build
