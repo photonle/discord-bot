@@ -5,7 +5,6 @@ const http = require("https")
 const fs = require("fs")
 
 const pkg = require("./package.json")
-const env = require("./.env.json")
 
 const client = new Discord.Client({
 	owner: ['239031520587808769', '142796643589292032', '191255947648172033', '263541113913212929', '221740543045009408'],
