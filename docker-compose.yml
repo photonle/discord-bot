@@ -1,14 +1,14 @@
 version: "3"
 
 volumes:
-  photon-faktory-data:
-  photon-bot-data:
+  faktory:
+  photon:
 
 services:
   queue:
     image: contribsys/faktory
     volumes:
-      - "photon-faktory-data:/var/lib/faktory"
+      - "faktory:/var/lib/faktory"
     ports:
       - "127.0.0.1:7420:7420"
   bot:
@@ -18,4 +18,4 @@ services:
     env_file:
       - .env
     volumes:
-      - "photon-bot-data:/app"
+      - "photon:/app"
