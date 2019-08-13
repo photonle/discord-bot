@@ -83,7 +83,7 @@ stop-master:
 deploy-dev:
   variables:
     DOCKER_HOST: "ssh://$FTP_USER@$FTP_HOST"
-    DOCKER_NAME: photon-bot-deployment
+    DOCKER_NAME: photon-bot-dev
     DOCKER_IMG_VERSION: $CI_COMMIT_REF_SLUG
   except:
     - master
@@ -98,7 +98,7 @@ deploy-dev:
 stop-dev:
   variables:
     DOCKER_HOST: "ssh://$FTP_USER@$FTP_HOST"
-    DOCKER_NAME: photon-bot-deployment
+    DOCKER_NAME: photon-bot-dev
     DOCKER_IMG_VERSION: $CI_COMMIT_REF_SLUG
     GIT_STRATEGY: none
   stage: deploy
