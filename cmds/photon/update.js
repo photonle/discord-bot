@@ -16,7 +16,7 @@ module.exports = class WorkshopUpdateCommand extends Command {
 		})
 	}
 
-	async run(msg, args, _){
+	async run(msg, args){
 		let {wsid} = args
 
 		let r = /\D/
