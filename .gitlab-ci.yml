@@ -41,73 +41,29 @@ release-image:
   only:
     - master
 
-.deploy: &define_deploy
-  stage: deploy
-  script:
-    - 'docker pull "$CI_REGISTRY_IMAGE":"$DOCKER_IMG_VERSION"'
-    - scp $FTP_USER@$FTP_HOST:~/env/"$DOCKER_NAME" .env
-    - docker rm --force "$DOCKER_NAME" || echo "Container already stopped."
-    - docker run --env-file .env -d -e GITLAB_SHA="$CI_COMMIT_SHORT_SHA" -e GITLAB_ID="$CI_PIPELINE_IID" -e GITLAB_BRANCH="$CI_COMMIT_REF_NAME" --name "$DOCKER_NAME" --mount source="$DOCKER_NAME",target=/app --restart always "$CI_REGISTRY_IMAGE":"$DOCKER_IMG_VERSION"
-
-.stop: &define_stop
-  stage: deploy
-  script:
-    - docker rm --force "$DOCKER_NAME" || echo "Container already stopped."
-  when:
-    manual
-
 deploy-master:
   variables:
     DOCKER_HOST: ssh://$FTP_USER@$FTP_HOST
     GIT_STRATEGY: none
     DOCKER_NAME: photon-bot
     DOCKER_IMG_VERSION: latest
-  <<: *define_deploy
+  script:
+    - docker-compose up -d --build
   only:
     - master
   environment:
     name: production
-    on_stop: stop-master
-
-stop-master:
-  variables:
-    DOCKER_HOST: ssh://$FTP_USER@$FTP_HOST
-    GIT_STRATEGY: none
-    DOCKER_NAME: photon-bot
-  <<: *define_stop
-  environment:
-    name: production
-    action: stop
-  only:
-    - master
 
 deploy-dev:
   variables:
     DOCKER_HOST: "ssh://$FTP_USER@$FTP_HOST"
     DOCKER_NAME: photon-bot-dev
     DOCKER_IMG_VERSION: $CI_COMMIT_REF_SLUG
-  except:
-    - master
   stage: deploy
   script:
       - scp $FTP_USER@$FTP_HOST:~/env/"$DOCKER_NAME" .env
+      - docker build
       - docker-compose up -d --build
   environment:
     name: development
     on_stop: stop-dev
-
-stop-dev:
-  variables:
-    DOCKER_HOST: "ssh://$FTP_USER@$FTP_HOST"
-    DOCKER_NAME: photon-bot-dev
-    DOCKER_IMG_VERSION: $CI_COMMIT_REF_SLUG
-    GIT_STRATEGY: none
-  stage: deploy
-  environment:
-    name: development
-    action: stop
-  when: manual
-  except:
-    - master
-  script:
-    docker compose down
