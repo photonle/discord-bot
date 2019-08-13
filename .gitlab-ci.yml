@@ -103,6 +103,7 @@ stop-dev:
   stage: deploy
   environment:
     name: development
+    action: stop
   when: manual
   except:
     - master
