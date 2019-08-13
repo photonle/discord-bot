@@ -2,6 +2,7 @@ version: "3"
 
 volumes:
   photon-faktory-data:
+  photon-bot-data:
 
 services:
   queue:
@@ -17,3 +18,5 @@ services:
       - queue
     env_file:
       - .env
+    volumes:
+      - "photon-bot-data:/app"
