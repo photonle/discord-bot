@@ -1,17 +1,35 @@
 version: "3"
 
 volumes:
-  faktory-data:
+  faktory:
+  photon:
 
 services:
   queue:
     image: contribsys/faktory
     volumes:
-      - "photon-faktory-data:/var/lib/faktory"
+      - "faktory:/var/lib/faktory"
     ports:
-      - "127.0.0.1:7419:7419"
       - "127.0.0.1:7420:7420"
+    env_file:
+      - .env
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    env_file:
+      - .env
   bot:
-    build: .
+    image: registry.git.doctor-internet.dev/photon/discord-bot
+    depends_on:
+      - queue
+    env_file:
+      - .env
+    volumes:
+      - "photon:/app"
+  worker:
+    image: registry.git.doctor-internet.dev/photon/workshop-runner
+    env_file:
+      - .env
     depends_on:
       - queue

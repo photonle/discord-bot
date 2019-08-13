@@ -9,6 +9,7 @@ variables:
   DOCKER_DRIVER: overlay2
   CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
   CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:latest
+  COMPOSE_PROJECT_NAME: photon-bot
   
 before_script:
     - 'which ssh-agent || ( apk update && apk add openssh-client )'
@@ -79,3 +80,34 @@ stop-master:
     action: stop
   only:
     - master
+
+deploy-dev:
+  variables:
+    DOCKER_HOST: "ssh://$FTP_USER@$FTP_HOST"
+    DOCKER_NAME: photon-bot-dev
+    DOCKER_IMG_VERSION: $CI_COMMIT_REF_SLUG
+  except:
+    - master
+  stage: deploy
+  script:
+      - scp $FTP_USER@$FTP_HOST:~/env/"$DOCKER_NAME" .env
+      - docker-compose up -d --build
+  environment:
+    name: development
+    on_stop: stop-dev
+
+stop-dev:
+  variables:
+    DOCKER_HOST: "ssh://$FTP_USER@$FTP_HOST"
+    DOCKER_NAME: photon-bot-dev
+    DOCKER_IMG_VERSION: $CI_COMMIT_REF_SLUG
+    GIT_STRATEGY: none
+  stage: deploy
+  environment:
+    name: development
+    action: stop
+  when: manual
+  except:
+    - master
+  script:
+    docker compose down
