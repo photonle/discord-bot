@@ -49,6 +49,7 @@ deploy-master:
     DOCKER_IMG_VERSION: latest
   stage: deploy
   script:
+    - scp $FTP_USER@$FTP_HOST:~/env/"$DOCKER_NAME" .env
     - docker-compose up -d --build
   only:
     - master
@@ -63,7 +64,6 @@ deploy-dev:
   stage: deploy
   script:
       - scp $FTP_USER@$FTP_HOST:~/env/"$DOCKER_NAME" .env
-      - docker build
       - docker-compose up -d --build
   environment:
     name: development
