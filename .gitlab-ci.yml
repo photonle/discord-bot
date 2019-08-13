@@ -79,3 +79,32 @@ stop-master:
     action: stop
   only:
     - master
+
+deploy-dev:
+  variables:
+    DOCKER_HOST: "ssh://$FTP_USER@$FTP_HOST"
+    DOCKER_NAME: photon-bot-deployment
+    DOCKER_IMG_VERSION: $CI_COMMIT_REF_SLUG
+  except:
+    - master
+  stage: deploy
+  script:
+      - docker-compose up -d --build
+  environment:
+    name: development
+    on_stop: stop-dev
+
+stop-dev:
+  variables:
+    DOCKER_HOST: "ssh://$FTP_USER@$FTP_HOST"
+    DOCKER_NAME: photon-bot-deployment
+    DOCKER_IMG_VERSION: $CI_COMMIT_REF_SLUG
+    GIT_STRATEGY: none
+  stage: deploy
+  environment:
+    name: development
+  when: manual
+  except:
+    - master
+  script:
+    docker compose down
