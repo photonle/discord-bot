@@ -67,3 +67,5 @@ deploy-dev:
   environment:
     name: development
     on_stop: stop-dev
+  except:
+    - master
