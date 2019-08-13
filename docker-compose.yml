@@ -1,9 +1,13 @@
-version: "3.7"
+version: "3"
+
+volumes:
+  faktory-data:
+
 services:
   queue:
     image: contribsys/faktory
     volumes:
-      - faktory-data:/var/lib/faktory
+      - "photon-faktory-data:/var/lib/faktory"
     ports:
       - "127.0.0.1:7419:7419"
       - "127.0.0.1:7420:7420"
