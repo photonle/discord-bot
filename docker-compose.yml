@@ -34,3 +34,10 @@ services:
       - .env
     depends_on:
       - queue
+  adminer:
+      image: adminer
+      restart: always
+      ports:
+        - "127.0.0.1:7421:8080"
+      depends_on:
+        - db
