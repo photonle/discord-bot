@@ -67,6 +67,5 @@ deploy-dev:
       - docker-compose up -d --build
   environment:
     name: development
-    on_stop: stop-dev
   except:
     - master
