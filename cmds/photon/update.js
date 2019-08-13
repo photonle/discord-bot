@@ -24,6 +24,7 @@ module.exports = class CarCommand extends Command {
 			wsid = wsid.replace(r, '')
 		}
 
-		return msg.say(`loading ${wsid}`)
+		await this.queue('UpdateWorkshop', {wsid})
+		return msg.say(`queued ${wsid}`)
 	}
 }
