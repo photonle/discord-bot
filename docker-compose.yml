@@ -15,3 +15,5 @@ services:
     build: .
     depends_on:
       - queue
+    env_file:
+      - .env
