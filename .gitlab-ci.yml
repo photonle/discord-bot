@@ -47,6 +47,7 @@ deploy-master:
     GIT_STRATEGY: none
     DOCKER_NAME: photon-bot
     DOCKER_IMG_VERSION: latest
+  stage: deploy
   script:
     - docker-compose up -d --build
   only:
