@@ -1,6 +1,6 @@
 const Command = require('../faktorycommand.js')
 
-module.exports = class CarCommand extends Command {
+module.exports = class WorkshopUpdateCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'update',
