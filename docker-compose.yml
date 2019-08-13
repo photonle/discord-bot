@@ -10,7 +10,6 @@ services:
     volumes:
       - "photon-faktory-data:/var/lib/faktory"
     ports:
-      - "127.0.0.1:7419:7419"
       - "127.0.0.1:7420:7420"
   bot:
     build: .
