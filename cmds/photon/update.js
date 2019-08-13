@@ -1,4 +1,4 @@
-const Command = require("discord.js-commando").Command
+const Command = require('../faktorycommand.js')
 
 module.exports = class CarCommand extends Command {
 	constructor(client) {
