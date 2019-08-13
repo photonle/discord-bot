@@ -1,7 +1,7 @@
 const Command = require("discord.js-commando").Command
 const faktory = require("faktory-worker")
 
-module.exports = class CarCommand extends Command {
+module.exports = class FaktoryCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'update',
