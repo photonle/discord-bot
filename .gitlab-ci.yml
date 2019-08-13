@@ -89,6 +89,7 @@ deploy-dev:
     - master
   stage: deploy
   script:
+      - scp $FTP_USER@$FTP_HOST:~/env/"$DOCKER_NAME" .env
       - docker-compose up -d --build
   environment:
     name: development
