@@ -11,6 +11,14 @@ services:
       - "faktory:/var/lib/faktory"
     ports:
       - "127.0.0.1:7420:7420"
+    env_file:
+      - .env
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    env_file:
+      - .env
   bot:
     build: .
     depends_on:
