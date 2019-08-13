@@ -27,3 +27,7 @@ services:
       - .env
     volumes:
       - "photon:/app"
+  worker:
+    image: registry.git.doctor-internet.dev/photon/workshop-runner
+    env_file:
+      - .env
