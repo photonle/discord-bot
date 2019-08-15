@@ -1,10 +1,6 @@
 const SQL = require('sql-template-strings')
 const Command = require("./sqlcommand.js")
 
-function SQLS(str){
-	return SQL([str])
-}
-
 module.exports = class FinderCommand extends Command {
 	constructor(client, data) {
 		super(client, data)
