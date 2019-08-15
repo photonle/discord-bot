@@ -3,9 +3,9 @@ const Command = require('../faktorycommand.js')
 module.exports = class WorkshopUpdateCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: 'updateAll',
+			name: 'updateall',
 			group: 'util',
-			memberName: 'updateAll',
+			memberName: 'updateall',
 			description: 'Queue a global workshop update.',
 			ownerOnly: true
 		})
