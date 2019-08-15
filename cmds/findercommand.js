@@ -16,7 +16,7 @@ module.exports = class FinderCommand extends Command {
 	}
 
 	async run(msg, args, _){
-		let reply = msg.say(`Searching for ${this.queryTable} ${this.finderType} \`${args.path.replace(/`/, '\`')}\` in addons.`)
+		let reply = msg.say(`Searching for ${this.queryType} ${this.finderType} \`${args.path.replace(/`/, '\`')}\` in addons.`)
 		let matches = await this.query(this.generateFinderQuery(args.path))
 		if (matches.length === 0){
 			return (await reply).edit(`I haven't seen that ${this.queryType} ${this.finderType} before.`)
