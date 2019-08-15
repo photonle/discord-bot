@@ -42,7 +42,7 @@ module.exports = class FinderCommand extends Command {
 
 	 generateWhere(query, str){
 		if (this.queryTable === "files"){
-			if (str.startsWith("lua")){
+			if (str.startsWith("lua/")){
 				return query
 					.append(` WHERE ${this.finderName} = `)
 					.append(SQL`${str}`)
