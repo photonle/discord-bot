@@ -17,26 +17,27 @@ module.exports = class FinderCommand extends Command {
 
 	async run(msg, args, _){
 		let reply = msg.say(`Searching for ${this.queryTable} ${this.finderType} \`${args.path.replace(/`/, '\`')}\` in addons.`)
+		let matches = await this.query(this.generateFinderQuery(args.path))
+		if (matches.length === 0){
+			return (await reply).edit(`I haven't seen that ${this.queryType} ${this.finderType} before.`)
+		}
 
+		matches = matches.map(x => `\`${x.path.replace(/`/, '\\`')}\` has been used in ${x.count} ${x.count === 1 ? 'addon' : 'addons'} that I've seen.`).join("\n\n")
+		if (matches.length > 1800){
+			return (await reply).edit(`\`${args.path.replace(/`/, '\`')}\` matches too many results to display, please be more specific.`)
+		}
+
+		return (await reply).edit(`${matches}\n\nTo see which addons a ${this.queryType} is used in, run !${this.name}s {${this.finderType}`)
+	}
+
+	generateFinderQuery(path){
 		let query = SQL`SELECT `
 			.append(this.finderName)
 			.append(" path, COUNT(*) count FROM ")
 			.append(this.queryTable)
-		query = this.generateWhere(query, args.path)
+		return this.generateWhere(query, path)
 			.append(" GROUP BY ")
 			.append(this.finderName)
-
-		let matches = await this.query(query)
-		if (matches.length === 0){
-			return (await reply).edit("I haven't seen that vehicle name before.")
-		} else {
-			matches = matches.map(x => `\`${x.path.replace(/`/, '\\`')}\` has been used in ${x.count} ${x.count === 1 ? 'addon' : 'addons'} that I've seen.`).join("\n\n")
-			if (matches.length > 1800){
-				return (await reply).edit("Please be more specific.")
-			} else {
-				return (await reply).edit(`${matches}\n\nTo see which addons a vehicle is used in, run !${this.name}s {component}`)
-			}
-		}
 	}
 
 	 generateWhere(query, str){
