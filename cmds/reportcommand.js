@@ -10,11 +10,13 @@ module.exports = class ReportCommand extends Command {
 		this.queryType = "vehicle"
 		this.finderType = "name"
 		this.finderName = "cname"
+		this.reportTitle = "Vehicle"
 	}
 
 	async run(msg, args, _){
 		let reply = msg.say(`Searching for ${this.queryType} ${this.finderType} \`${args.path.replace(/`/, '\`')}\` in addons.`)
 		let matches = await this.query(this.generateFinderQuery(args.path))
+		console.log(matches)
 		if (matches.length === 0){
 			return (await reply).edit(`I haven't seen that ${this.queryType} ${this.finderType} before.`)
 		}
@@ -37,7 +39,7 @@ module.exports = class ReportCommand extends Command {
 
 		let i = 1
 		let embed = new Embed()
-		embed.setTitle(`Vehicle Report: ${match.path}`);
+		embed.setTitle(`${this.reportTitle} Report: ${match.path}`);
 
 		(await match.data).map(addon => {
 			embed.addField(
