@@ -34,6 +34,3 @@ module.exports = class CarCommand extends Command {
 		}
 	}
 }
-
-async function main(){db = await sqlite.open("/app/photon.read.db")}
-main()
