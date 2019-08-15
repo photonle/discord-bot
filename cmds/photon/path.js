@@ -17,7 +17,7 @@ module.exports = class PathCommand extends Command {
 
 		this.queryTable = "files"
 		this.queryType = "file"
-		this.finderType = "paths"
+		this.finderType = "path"
 		this.finderName = "path"
 	}
 }
