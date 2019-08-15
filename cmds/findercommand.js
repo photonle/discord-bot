@@ -18,8 +18,7 @@ module.exports = class FinderCommand extends Command {
 	async run(msg, args, _){
 		let reply = msg.say(`Searching for ${this.queryTable} ${this.finderType} \`${args.path.replace(/`/, '\`')}\` in addons.`)
 
-		let query = SQL([`SELECT ${this.finderName} path, COUNT(*) count FROM ${this.queryTable}`])
-		msg.say("got to generation")
+		let query = SQLS(`SELECT ${this.finderName} path, COUNT(*) count FROM ${this.queryTable}`)
 		query = this.generateWhere(query, args.path).append(`GROUP BY ${this.finderName}`)
 
 		msg.say("got to query")
@@ -41,20 +40,14 @@ module.exports = class FinderCommand extends Command {
 			if (str.startsWith("lua")){
 				return query
 					.append(` WHERE ${this.finderName} = `)
-					.append(SQL([str]))
+					.append(SQLS(str))
 			}
 			return query.append(`WHERE ${this.finderName} LIKE `)
-				.append(str.endsWith(".lua") ? SQL(`%${str}`) : SQL(`%${str}%`))
+				.append(str.endsWith(".lua") ? SQLS(`%${str}`) : SQLS(`%${str}%`))
 		} else {
-			console.log(query.strings)
-			console.log(query.strings.length)
-			query.append(`WHERE ${this.finderName} LIKE `)
-			console.log(query.strings)
-			console.log(query.strings.length)
-			query.append(SQL([`%${str}%`]))
-			console.log(query.strings)
-			console.log(query.strings.length)
 			return query
+				.append(` WHERE ${this.finderName} LIKE `)
+				.append(SQLS(`%${str}%`))
 		}
 	 }
 }
