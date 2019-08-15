@@ -1,6 +1,10 @@
 const SQL = require('sql-template-strings')
 const Command = require("./sqlcommand.js")
 
+function SQLS(str){
+	return SQL([str])
+}
+
 module.exports = class FinderCommand extends Command {
 	constructor(client, data) {
 		super(client, data)
@@ -32,8 +36,8 @@ module.exports = class FinderCommand extends Command {
 		if (this.queryTable === "files"){
 			if (str.startsWith("lua")){
 				return query
-					.append(`WHERE ${this.finderName} = `)
-					.append(SQL(str))
+					.append(` WHERE ${this.finderName} = `)
+					.append(SQL([str]))
 			}
 			return query.append(`WHERE ${this.finderName} LIKE `)
 				.append(str.endsWith(".lua") ? SQL(`%${str}`) : SQL(`%${str}%`))
@@ -43,7 +47,7 @@ module.exports = class FinderCommand extends Command {
 			query.append(`WHERE ${this.finderName} LIKE `)
 			console.log(query.strings)
 			console.log(query.strings.length)
-			query.append(SQL(`%${str}%`))
+			query.append(SQL([`%${str}%`]))
 			console.log(query.strings)
 			console.log(query.strings.length)
 			return query
