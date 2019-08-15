@@ -1,5 +1,5 @@
 const Command = require("discord.js-commando").Command
-const SQLStatement = require("sql-template-strings")
+const SQLStatement = require("sql-template-strings").SQLStatement
 const pool = require('../libs/sql.js')
 
 module.exports = class SQLCommand extends Command {
