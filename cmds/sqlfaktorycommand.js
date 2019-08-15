@@ -1,7 +1,7 @@
-const Command = require("discord.js-commando").Command
+const Command = require("./sqlcommand").Command
 const faktory = require("faktory-worker")
 
-module.exports = class FaktoryCommand extends Command {
+module.exports = class SQLFaktoryCommand extends Command {
 	async queue(job, data = {}){
 		let client = await faktory.connect()
 		await client.job(job, data).push()
