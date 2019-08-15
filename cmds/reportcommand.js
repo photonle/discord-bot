@@ -1,5 +1,6 @@
 const SQL = require('sql-template-strings')
 const Command = require("./findercommand")
+const Embed = require("discord.js").RichEmbed
 
 module.exports = class ReportCommand extends Command {
 	constructor(client, data) {
