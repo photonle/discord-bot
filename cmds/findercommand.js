@@ -35,12 +35,12 @@ module.exports = class FinderCommand extends Command {
 			.append(this.finderName)
 			.append(" path, COUNT(*) count FROM ")
 			.append(this.queryTable)
-		return this.generateWhere(query, path)
+		return this.generateFinderWhere(query, path)
 			.append(" GROUP BY ")
 			.append(this.finderName)
 	}
 
-	 generateWhere(query, str){
+	 generateFinderWhere(query, str){
 		if (this.queryTable === "files"){
 			if (str.startsWith("lua/")){
 				return query
