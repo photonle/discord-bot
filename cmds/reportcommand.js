@@ -67,5 +67,6 @@ module.exports = class ReportCommand extends Command {
 			.append(SQL`${path}`)
 
 		console.log(query.sql)
+		return query
 	}
 }
