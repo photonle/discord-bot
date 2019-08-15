@@ -52,13 +52,20 @@ module.exports = class ReportCommand extends Command {
 	}
 
 	generateFinderQuery(path){
-		return SQL`SELECT `
+		let query = SQL`SELECT `
 			.append(this.finderName)
-			.append(" path, COUNT(*) count FROM ")
+
+		if (this.finderName !== "path"){
+			query = query.append(" path")
+		}
+
+		query.append(", COUNT(*) count FROM ")
 			.append(this.queryTable)
 			.append(" WHERE ")
 			.append(this.finderName)
 			.append(" = ")
 			.append(SQL`${path}`)
+
+		console.log(query.sql)
 	}
 }
