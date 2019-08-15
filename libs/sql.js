@@ -9,4 +9,4 @@ const pool = mysql.createPool({
 	connectionLimit: 10,
 	queueLimit: 0
 })
-return pool
+module.exports = pool
