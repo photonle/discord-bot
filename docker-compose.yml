@@ -22,6 +22,8 @@ services:
       - .env
     volumes:
       - "database:/var/lib/mysql"
+    ports:
+      "7422:3306"
   bot:
     build: .
     image: registry.git.doctor-internet.dev/photon/discord-bot
