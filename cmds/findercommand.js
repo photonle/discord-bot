@@ -38,9 +38,15 @@ module.exports = class FinderCommand extends Command {
 			return query.append(`WHERE ${this.finderName} LIKE `)
 				.append(str.endsWith(".lua") ? SQL(`%${str}`) : SQL(`%${str}%`))
 		} else {
+			console.log(query.strings)
+			console.log(query.strings.length)
+			query.append(`WHERE ${this.finderName} LIKE `)
+			console.log(query.strings)
+			console.log(query.strings.length)
+			query.append(SQL(`%${str}%`))
+			console.log(query.strings)
+			console.log(query.strings.length)
 			return query
-				.append(`WHERE ${this.finderName} LIKE `)
-				.append(SQL(`%${str}%`))
 		}
 	 }
 }
