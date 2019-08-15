@@ -21,7 +21,7 @@ module.exports = class ReportCommand extends Command {
 		let match = matches[0]
 
 		match = {
-			path: x.path,
+			path: match.path,
 			data: this.query(
 				SQL`SELECT `
 					.append(this.finderName)
@@ -31,7 +31,7 @@ module.exports = class ReportCommand extends Command {
 					.append(this.queryTable)
 					.append(".owner = addons.wsid INNER JOIN authors ON addons.author = authors.sid WHERE ")
 					.append(this.finderName)
-					.append(SQL` = ${x.path}`)
+					.append(SQL` = ${match.path}`)
 			)
 		}
 
