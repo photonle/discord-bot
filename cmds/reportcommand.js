@@ -18,30 +18,28 @@ module.exports = class ReportCommand extends Command {
 		if (matches.length === 0){
 			return (await reply).edit(`I haven't seen that ${this.queryType} ${this.finderType} before.`)
 		}
-
-		matches = await Promise.all(matches.map(async x => {
-			return {
-				path: x.path,
-				data: await this.query(
-					SQL`SELECT `
-						.append(this.finderName)
-						.append(" path, name, sid, sname FROM ")
-						.append(this.queryTable)
-						.append(" INNER JOIN addons ON ")
-						.append(this.queryTable)
-						.append(".owner = addons.wsid INNER JOIN authors ON addons.author = authors.sid WHERE ")
-						.append(this.finderName)
-						.append(SQL` = ${x.path}`)
-				)
-			}
-		}))
 		let match = matches[0]
+
+		match = {
+			path: x.path,
+			data: this.query(
+				SQL`SELECT `
+					.append(this.finderName)
+					.append(" path, name, sid, sname FROM ")
+					.append(this.queryTable)
+					.append(" INNER JOIN addons ON ")
+					.append(this.queryTable)
+					.append(".owner = addons.wsid INNER JOIN authors ON addons.author = authors.sid WHERE ")
+					.append(this.finderName)
+					.append(SQL` = ${x.path}`)
+			)
+		}
 
 		let i = 1
 		let embed = new Embed()
 		embed.setTitle(`Vehicle Report: ${match.path}`);
 
-		(await data).map(addon => {
+		(await match.data).map(addon => {
 			embed.addField(
 				`Addon ${i++}`,
 				`[${addon.name.replace(/([\[\]])/g, '\$1')}](https://steamcommunity.com/sharedfiles/filedetails/?id=${addon.owner}) by [${addon.sname.replace(/([\[\]])/g, '\$1')}](https://steamcommunity.com/profiles/${addon.sid})`
