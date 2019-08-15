@@ -22,7 +22,7 @@ module.exports = class ComponentCommand extends Command {
 
 		args.path = `%${args.path}%`
 		console.log(SQL`SELECT \`cname\`, COUNT(*) \`count\` FROM \`components\` WHERE \`cname\` LIKE ${args.path} GROUP BY \`cname\``.sql)
-		let matches = await this.query(SQL`SELECT \`cname\`, COUNT(*) \`count\` FROM \`components\` WHERE \`cname\` LIKE ${args.path} GROUP BY \`cname\``)
+		let matches = await this.query(SQL`SELECT cname, COUNT(*) count FROM components WHERE cname LIKE ${args.path} GROUP BY cname`)
 		if (matches.length === 0){
 			return (await reply).edit("I haven't seen that component name before.")
 		} else {
