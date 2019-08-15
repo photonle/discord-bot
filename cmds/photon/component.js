@@ -1,7 +1,5 @@
-const sqlite = require("sqlite")
-let db
 const SQL = require('sql-template-strings')
-const Command = require("discord.js-commando").Command
+const Command = require("../sqlcommand")
 
 module.exports = class ComponentCommand extends Command {
 	constructor(client) {
@@ -23,16 +21,15 @@ module.exports = class ComponentCommand extends Command {
 		let reply = msg.say(`Searching for \`${args.path.replace(/`/, '\`')}\` in addons.`)
 
 		args.path = `%${args.path}%`
-		let matches = await db.all(SQL`SELECT cname as path, COUNT(*) as count FROM components WHERE cname LIKE ${args.path} GROUP BY cname`)
-		reply = await reply
+		let matches = await this.query(SQL`SELECT cname as path, COUNT(*) as count FROM components WHERE cname LIKE ${args.path} GROUP BY cname`)
 		if (matches.length === 0){
-			return reply.edit("I haven't seen that component name before.")
+			return (await reply).edit("I haven't seen that component name before.")
 		} else {
 			matches = matches.map(x => `\`${x.path.replace(/`/, '\\`')}\` has been used in ${x.count} ${x.count === 1 ? 'addon' : 'addons'} that I've seen.`).join("\n\n")
 			if (matches.length > 1800){
-				return reply.edit("Please be more specific.")
+				return (await reply).edit("Please be more specific.")
 			} else {
-				return reply.edit(matches)
+				return (await reply).edit(matches)
 			}
 		}
 	}
