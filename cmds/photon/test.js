@@ -26,8 +26,10 @@ module.exports = class TestCommand extends Command {
 		let reply = msg.say(`Searching for ${this.queryTable} ${this.finderType} \`${args.path.replace(/`/, '\`')}\` in addons.`)
 
 		let query = SQL(`SELECT ${this.finderName} path, COUNT(*) count FROM ${this.queryTable}`)
+		msg.say("got to generation")
 		query = this.generateWhere(query, args.path).append(`GROUP BY ${this.finderName}`)
 
+		msg.say("got to query")
 		let matches = await this.query(query)
 		if (matches.length === 0){
 			return (await reply).edit("I haven't seen that vehicle name before.")
