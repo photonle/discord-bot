@@ -16,11 +16,10 @@ module.exports = class ReportCommand extends Command {
 	async run(msg, args, _){
 		let reply = msg.say(`Searching for ${this.queryType} ${this.finderType} \`${args.path.replace(/`/, '\`')}\` in addons.`)
 		let matches = await this.query(this.generateFinderQuery(args.path))
-		console.log(matches)
-		if (matches.length === 0){
+		let match = matches[0]
+		if (match.count === 0){
 			return (await reply).edit(`I haven't seen that ${this.queryType} ${this.finderType} before.`)
 		}
-		let match = matches[0]
 
 		match = {
 			path: match.path,
