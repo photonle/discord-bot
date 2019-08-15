@@ -177,6 +177,9 @@ client.on('messageUpdate', (old, message) => {
 	}
 })
 
+client.on("commandError", (cmd, err, msg) => {
+	console.error(err)
+})
 let cmd = client.registry.commands.get("glua")
 if (cmd){cmd.dataTable = require('./libs/glua.json')}
 
