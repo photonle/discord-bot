@@ -16,10 +16,14 @@ module.exports = class FinderCommand extends Command {
 	}
 
 	async run(msg, args, _){
-		args.path = `%${args.path}%`
-		let reply = msg.say(`Searching for \`${args.path.replace(/`/, '\`')}\` in addons.`)
+		let reply = msg.say(`Searching for ${this.queryTable} ${this.finderType} \`${args.path.replace(/`/, '\`')}\` in addons.`)
 
-		let matches = await this.query(SQL`SELECT cname as path, COUNT(*) as count FROM cars WHERE cname LIKE ${args.path} GROUP BY cname`)
+		let query = SQL([`SELECT ${this.finderName} path, COUNT(*) count FROM ${this.queryTable}`])
+		msg.say("got to generation")
+		query = this.generateWhere(query, args.path).append(`GROUP BY ${this.finderName}`)
+
+		msg.say("got to query")
+		let matches = await this.query(query)
 		if (matches.length === 0){
 			return (await reply).edit("I haven't seen that vehicle name before.")
 		} else {
