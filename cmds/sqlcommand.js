@@ -4,12 +4,14 @@ const pool = require('../libs/sql.js')
 
 module.exports = class SQLCommand extends Command {
 	async query(query, data = {}){
+		let rows
+
 		if (query instanceof SQLStatement){
-			let [rows, fields] = await pool.query(query)
+			[rows] = await pool.query(query)
 			return rows
 		}
 
-		let [rows, fields] = await pool.query(query, data)
+		[rows] = await pool.query(query, data)
 		return rows
 	}
 }
