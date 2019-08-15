@@ -21,7 +21,7 @@ module.exports = class ComponentCommand extends Command {
 		let reply = msg.say(`Searching for \`${args.path.replace(/`/, '\`')}\` in addons.`)
 
 		args.path = `%${args.path}%`
-		let matches = await this.query(SQL`SELECT cname, COUNT(*) count FROM components WHERE cname LIKE ${args.path} GROUP BY cname`)
+		let matches = await this.query(SQL`SELECT cname path, COUNT(*) count FROM components WHERE cname LIKE ${args.path} GROUP BY cname`)
 		if (matches.length === 0){
 			return (await reply).edit("I haven't seen that component name before.")
 		} else {
