@@ -25,7 +25,7 @@ module.exports = class TestCommand extends Command {
 	async run(msg, args, _){
 		let reply = msg.say(`Searching for ${this.queryTable} ${this.finderType} \`${args.path.replace(/`/, '\`')}\` in addons.`)
 
-		let query = SQL(`SELECT ${this.finderName} path, COUNT(*) count FROM ${this.queryTable}`)
+		let query = SQL([`SELECT ${this.finderName} path, COUNT(*) count FROM ${this.queryTable}`])
 		msg.say("got to generation")
 		query = this.generateWhere(query, args.path).append(`GROUP BY ${this.finderName}`)
 
