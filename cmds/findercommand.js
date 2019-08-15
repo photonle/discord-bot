@@ -18,10 +18,14 @@ module.exports = class FinderCommand extends Command {
 	async run(msg, args, _){
 		let reply = msg.say(`Searching for ${this.queryTable} ${this.finderType} \`${args.path.replace(/`/, '\`')}\` in addons.`)
 
-		let query = SQLS(`SELECT ${this.finderName} path, COUNT(*) count FROM ${this.queryTable}`)
-		query = this.generateWhere(query, args.path).append(`GROUP BY ${this.finderName}`)
+		let query = SQL`SELECT `
+			.append(this.finderName)
+			.append(" path, COUNT(*) count FROM ")
+			.append(this.queryTable)
+		this.generateWhere(query, args.path)
+			.append(" GROUP BY ")
+			.append(this.finderName)
 
-		msg.say("got to query")
 		let matches = await this.query(query)
 		if (matches.length === 0){
 			return (await reply).edit("I haven't seen that vehicle name before.")
@@ -40,14 +44,15 @@ module.exports = class FinderCommand extends Command {
 			if (str.startsWith("lua")){
 				return query
 					.append(` WHERE ${this.finderName} = `)
-					.append(SQLS(str))
+					.append(SQL`${str}`)
 			}
 			return query.append(`WHERE ${this.finderName} LIKE `)
-				.append(str.endsWith(".lua") ? SQLS(`%${str}`) : SQLS(`%${str}%`))
+				.append(SQL`${str.endsWith(".lua") ? `%${str}` : `%${str}%`}`)
 		} else {
+			str = `%${str}%`
 			return query
 				.append(` WHERE ${this.finderName} LIKE `)
-				.append(SQLS(`%${str}%`))
+				.append(SQL`${str}`)
 		}
 	 }
 }
