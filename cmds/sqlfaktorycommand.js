@@ -1,4 +1,4 @@
-const Command = require("./sqlcommand").Command
+const Command = require("./sqlcommand")
 const faktory = require("faktory-worker")
 
 module.exports = class SQLFaktoryCommand extends Command {
