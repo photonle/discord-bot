@@ -1,61 +1,24 @@
-const sqlite = require("sqlite")
-let db
 const SQL = require('sql-template-strings')
-const Command = require("discord.js-commando").Command
-const Embed = require('discord.js').RichEmbed
+const Command = require("../reportcommand")
 
-module.exports = class PathCommand extends Command {
+module.exports = class PathsCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'paths',
 			group: 'util',
 			memberName: 'paths',
-			description: 'Advanced search for lua paths used in photon addons.',
+			description: 'Search for lua files used in photon addons.',
 			args: [{
 				key: 'path',
-				label: 'Search Path',
+				label: 'File Path',
 				prompt: 'Enter the path to search.',
 				type: 'string',
 			}]
 		})
-	}
 
-	async run(msg, args, _){
-		let matches = []
-		args.path = args.path.replace(/\//, '\\')
-		msg.say(`Searching for ${args.path.replace(/\\/g, '/')} in addons.`)
-		if (args.path.startsWith("lua")){
-			// Full Path
-			matches = await db.all(SQL`SELECT path, COUNT(*) as count FROM files WHERE path = ${args.path} GROUP BY path`)
-		} else if (args.path.endsWith(".lua")){
-			// End Path
-			args.path = `%${args.path}`
-			matches = await db.all(SQL`SELECT path, COUNT(*) as count FROM files WHERE path LIKE ${args.path} GROUP BY path`)
-		} else {
-			// Search
-			args.path = `%${args.path}%`
-			matches = await db.all(SQL`SELECT path, COUNT(*) as count FROM files WHERE path LIKE ${args.path} GROUP BY path`)
-		}
-
-		matches = await Promise.all(matches.map(async x => {return {path: x.path, data: await db.all(SQL`SELECT path, owner, name, CAST(sid AS TEXT) as sid, sname FROM files INNER JOIN addons on files.owner = addons.wsid INNER JOIN authors ON addons.author = authors.sid WHERE path = ${x.path}`)}}))
-		if (matches.length === 0){
-			return msg.say("I haven't seen that path before.")
-		} else if (matches.length > 10) {
-			return msg.say("Please refine your search term.")
-		}
-
-		matches = matches.map(x => {
-			let y = new Embed()
-			let i = 1
-			y.setAuthor(`Path Report: ${x.path.replace(/\\/g, '/')}`)
-			for (let addon of x.data){
-				y.addField(`Addon ${i++}`, `[${addon.name.replace(/([\[\]])/g, '\$1')}](https://steamcommunity.com/sharedfiles/filedetails/?id=${addon.owner}) by [${addon.sname.replace(/([\[\]])/g, '\$1')}](https://steamcommunity.com/profiles/${addon.sid})`)
-			}
-			return y
-		})
-		return Promise.all(matches.map(x => msg.say(x)))
+		this.queryTable = "files"
+		this.queryType = "file"
+		this.finderType = "paths"
+		this.finderName = "path"
 	}
 }
-
-async function main(){db = await sqlite.open("/app/photon.read.db")}
-main()
