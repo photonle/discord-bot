@@ -22,7 +22,7 @@ module.exports = class FinderCommand extends Command {
 			.append(this.finderName)
 			.append(" path, COUNT(*) count FROM ")
 			.append(this.queryTable)
-		this.generateWhere(query, args.path)
+		query = this.generateWhere(query, args.path)
 			.append(" GROUP BY ")
 			.append(this.finderName)
 
