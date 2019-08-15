@@ -25,6 +25,6 @@ module.exports = class WorkshopUpdateCommand extends Command {
 		}
 
 		await this.queue('UpdateWorkshop', {wsid})
-		return msg.say(`queued ${wsid}`)
+		return msg.say(`Added ${wsid} to the update queue.\nCheck <#611492538674839553> for status changes.`)
 	}
 }
