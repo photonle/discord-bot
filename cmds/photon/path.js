@@ -1,4 +1,3 @@
-const SQL = require('sql-template-strings')
 const Command = require("../findercommand")
 
 module.exports = class PathCommand extends Command {

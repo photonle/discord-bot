@@ -1,4 +1,3 @@
-const SQL = require('sql-template-strings')
 const Command = require("../reportcommand")
 
 module.exports = class CarsCommand extends Command {
