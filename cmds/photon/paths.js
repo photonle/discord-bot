@@ -19,5 +19,6 @@ module.exports = class PathsCommand extends Command {
 		this.queryType = "file"
 		this.finderType = "paths"
 		this.finderName = "path"
+		this.reportTitle = "File Path"
 	}
 }

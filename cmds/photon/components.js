@@ -19,5 +19,6 @@ module.exports = class ComponentsCommand extends Command {
 		this.queryType = "component"
 		this.finderType = "name"
 		this.finderName = "cname"
+		this.reportTitle = "Component"
 	}
 }
