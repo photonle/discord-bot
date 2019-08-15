@@ -29,7 +29,7 @@ module.exports = class CarCommand extends Command {
 			if (matches.length > 1800){
 				return (await reply).edit("Please be more specific.")
 			} else {
-				return (await reply).edit(matches)
+				return (await reply).edit(`${matches}\n\nTo see which addons a vehicle is used in, run !${this.name}s {component}`)
 			}
 		}
 	}
