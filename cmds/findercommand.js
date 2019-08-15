@@ -27,7 +27,7 @@ module.exports = class FinderCommand extends Command {
 			return (await reply).edit(`\`${args.path.replace(/`/, '\`')}\` matches too many results to display, please be more specific.`)
 		}
 
-		return (await reply).edit(`${matches}\n\nTo see which addons a ${this.queryType} is used in, run !${this.name}s {${this.finderType}`)
+		return (await reply).edit(`${matches}\n\nTo see which addons a ${this.queryType} is used in, run !${this.name}s {${this.finderType}}`)
 	}
 
 	generateFinderQuery(path){
