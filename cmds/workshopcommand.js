@@ -36,6 +36,8 @@ module.exports = class WorkshopUpdateCommand extends Command {
 		if (!args.wsid){
 			return msg.reply(`that's not a valid workshop link or ID :(`)
 		}
+
+		return false
 	}
 
 	reply(msg, str){
