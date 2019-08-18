@@ -23,14 +23,15 @@ module.exports = class WorkshopUpdateCommand extends Command {
 	}
 
 	async run(msg, args){
-		let {wsid, force} = args
-
 		let r = /\D/
-		while (wsid.match(r)){
-			wsid = wsid.replace(r, '')
+		while (args.wsid.match(r)){
+			args.wsid = args.wsid.replace(r, '')
+		}
+		if (args.wsid.length === 0){
+			return msg.reply("that's not a workshop ID or link :<")
 		}
 
-		await this.queue('UpdateWorkshop', {wsid, force})
-		return msg.say(`Added ${wsid} to the update queue.\nCheck <#611492538674839553> for status changes.`)
+		await this.queue('UpdateWorkshop', args)
+		return msg.reply(`I've added ${args.wsid} to the update queue.\nCheck <#611492538674839553> for status changes.`)
 	}
 }
