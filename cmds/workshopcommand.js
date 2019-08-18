@@ -18,7 +18,7 @@ module.exports = class WorkshopUpdateCommand extends Command {
 	 * @param wsid string Input string to check
 	 * @returns {boolean|string}
 	 */
-	static checkWsid(wsid){
+	checkWsid(wsid){
 		let r = /\D/
 		while (wsid.match(r)){
 			wsid = wsid.replace(r, '')
