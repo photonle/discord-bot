@@ -4,7 +4,7 @@ module.exports = class PathCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'path',
-			group: 'util',
+			group: 'photon',
 			memberName: 'path',
 			description: 'Search for lua files used in photon addons.',
 			args: [{

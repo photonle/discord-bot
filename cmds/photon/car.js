@@ -4,7 +4,7 @@ module.exports = class CarCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'car',
-			group: 'util',
+			group: 'photon',
 			memberName: 'car',
 			description: 'Search for vehicle names used in photon addons.',
 			args: [{

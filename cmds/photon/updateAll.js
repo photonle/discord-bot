@@ -4,7 +4,7 @@ module.exports = class WorkshopUpdateCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'updateall',
-			group: 'util',
+			group: 'photon',
 			memberName: 'updateall',
 			description: 'Queue a global workshop update.',
 			ownerOnly: true

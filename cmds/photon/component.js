@@ -4,7 +4,7 @@ module.exports = class ComponentCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'component',
-			group: 'util',
+			group: 'photon',
 			memberName: 'component',
 			description: 'Search for component names used in photon addons.',
 			args: [{
