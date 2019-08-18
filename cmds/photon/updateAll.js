@@ -1,4 +1,4 @@
-const Command = require('../faktorycommand.js')
+const Command = require('../workshopcommand')
 
 module.exports = class WorkshopUpdateCommand extends Command {
 	constructor(client) {
@@ -20,6 +20,6 @@ module.exports = class WorkshopUpdateCommand extends Command {
 
 	async run(msg, args){
 		await this.queue('UpdateAllWorkshop', args)
-		return msg.reply("I've added a bulk update job to the update queue.\nCheck <#611492538674839553> for status changes.")
+		return this.reply(msg, `I've added a bulk update to the queue.`)
 	}
 }
