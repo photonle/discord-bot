@@ -23,7 +23,9 @@ module.exports = class WorkshopUpdateCommand extends Command {
 	}
 
 	async run(msg, args){
-		this.wsid(msg, args)
+		let reply = this.wsid(msg, args)
+		if (reply){return reply}
+
 		await this.queue('UpdateWorkshop', args)
 		return this.reply(msg, `I've added ${args.wsid} to the update queue.`)
 	}
