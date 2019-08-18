@@ -31,6 +31,13 @@ module.exports = class WorkshopUpdateCommand extends Command {
 		}
 	}
 
+	wsid(msg, args){
+		args.wsid = this.checkWsid(args.wsid)
+		if (!args.wsid){
+			return msg.reply(`that's not a valid workshop link or ID :(`)
+		}
+	}
+
 	reply(msg, str){
 		return msg.reply(`${str}\nCheck <#611492538674839553> for status changes.`)
 	}
