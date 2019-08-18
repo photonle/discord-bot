@@ -1,4 +1,4 @@
-const Command = require('../faktorycommand.js')
+const Command = require('../workshopcommand')
 
 module.exports = class WorkshopUpdateCommand extends Command {
 	constructor(client) {
@@ -23,15 +23,9 @@ module.exports = class WorkshopUpdateCommand extends Command {
 	}
 
 	async run(msg, args){
-		let r = /\D/
-		while (args.wsid.match(r)){
-			args.wsid = args.wsid.replace(r, '')
-		}
-		if (args.wsid.length === 0){
-			return msg.reply("that's not a workshop ID or link :<")
-		}
+		args.wsid = this.checkWsid(args.wsid)
 
 		await this.queue('UpdateWorkshop', args)
-		return msg.reply(`I've added ${args.wsid} to the update queue.\nCheck <#611492538674839553> for status changes.`)
+		return this.reply(msg, `I've added ${args.wsid} to the update queue.`)
 	}
 }
