@@ -26,7 +26,7 @@ module.exports = class ReportCommand extends Command {
 			data: this.query(
 				SQL`SELECT `
 					.append(this.finderName)
-					.append(" path, name, sid, sname FROM ")
+					.append(" path, name, sid, sname, owner FROM ")
 					.append(this.queryTable)
 					.append(" INNER JOIN addons ON ")
 					.append(this.queryTable)
