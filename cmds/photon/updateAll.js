@@ -20,6 +20,6 @@ module.exports = class WorkshopUpdateCommand extends Command {
 
 	async run(msg, args){
 		await this.queue('UpdateAllWorkshop', args)
-		return msg.say(`Added bulk update job to the update queue.\nCheck <#611492538674839553> for status changes.`)
+		return msg.reply("I've added a bulk update job to the update queue.\nCheck <#611492538674839553> for status changes.")
 	}
 }
