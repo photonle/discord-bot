@@ -2,7 +2,7 @@ const Command = require('./faktorycommand')
 
 module.exports = class WorkshopUpdateCommand extends Command {
 	async run(msg, args){
-		let {wsid, force} = args
+		let {wsid} = args
 
 		let r = /\D/
 		while (wsid.match(r)){
