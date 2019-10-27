@@ -1,0 +1,16 @@
+name: Deployment
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Build & Publish Image
+        uses: machine-learning-apps/gpr-docker-publish@v1.3
+        env:
+          USERNAME: github
+          PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE_NAME: photon-bot
+          DOCKERFILE_PATH: Dockerfile
+          BUILD_CONTEXT: .
