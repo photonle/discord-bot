@@ -7,10 +7,10 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Build & Publish Image
-        uses: machine-learning-apps/gpr-docker-publish@v1.3
-        env:
-          USERNAME: JoshPiper
-          PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-          IMAGE_NAME: photon-bot
-          DOCKERFILE_PATH: Dockerfile
-          BUILD_CONTEXT: .
+        uses: elgohr/Publish-Docker-Github-Action@2.7
+        with:
+          name: docker.pkg.github.com/${{ GITHUB_REPOSITORY }}
+          username: ${{ GITHUB_ACTOR }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          tag_names: true
