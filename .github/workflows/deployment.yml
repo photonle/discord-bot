@@ -14,3 +14,23 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
           tag_names: true
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      -
+        name: Install Key
+        uses: shimataro/ssh-key-action@v1.3.0
+        with:
+          private-key: ${{ secrets.SSH_KEY }}
+          known-hosts: ${{ secrets.KNOWN_HOSTS }}
+      - name: Deploy
+        env:
+          DOCKER_HOST: ssh://${{ secrets.FTP_USER }}@{{ secrets.FTP_HOST }}"
+          DOCKER_NAME: photon-bot
+          DOCKER_IMG_VERSION: latest
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+        run: |
+          scp $FTP_USER@$FTP_HOST:~/env/"$DOCKER_NAME" .env
+          docker-compose up -d bot
