@@ -26,11 +26,11 @@ jobs:
           known-hosts: ${{ secrets.KNOWN_HOSTS }}
       - name: Deploy
         env:
-          DOCKER_HOST: ssh://${{ secrets.FTP_USER }}@{{ secrets.FTP_HOST }}"
+          DOCKER_HOST: ssh://${{ secrets.FTP_USER }}@${{ secrets.FTP_HOST }}"
           DOCKER_NAME: photon-bot
           DOCKER_IMG_VERSION: latest
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_HOST: ${{ secrets.FTP_HOST }}
         run: |
-          scp $FTP_USER@$FTP_HOST:~/env/"$DOCKER_NAME" .env
+          scp $FTP_USER@$FTP_HOST:~/env-"$DOCKER_NAME" .env
           docker-compose up -d bot
