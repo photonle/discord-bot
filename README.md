@@ -1,5 +1,5 @@
-# Photon-Bot
-A node.js based discord bot, for use in the PLE Discord.
+# discord-bot
+A simple Discord.js based bot, running on Node, for use in the Photon Lighting Engine discord.
 
 ## Stuff it does.
 - Has configs and data files.
