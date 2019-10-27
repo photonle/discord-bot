@@ -9,7 +9,7 @@ jobs:
       - name: Build & Publish Image
         uses: machine-learning-apps/gpr-docker-publish@v1.3
         env:
-          USERNAME: github
+          USERNAME: JoshPiper
           PASSWORD: ${{ secrets.GITHUB_TOKEN }}
           IMAGE_NAME: photon-bot
           DOCKERFILE_PATH: Dockerfile
