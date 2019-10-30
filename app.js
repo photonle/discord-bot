@@ -91,8 +91,8 @@ let tag_restrictions = {
 	}
 }
 
-new require('./libs/warner')(client,'/app/warned', tag_restrictions)
-new require('./libs/tagger')(client, untaggable, tag_restrictions)
+new (require('./libs/warner'))(client,'/app/warned', tag_restrictions)
+new (require('./libs/tagger'))(client, untaggable, tag_restrictions)
 
 client.on("commandError", (cmd, err, msg) => {
 	console.error(err)
