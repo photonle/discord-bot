@@ -36,7 +36,7 @@ class Warner extends Set {
 	}
 
 	add(id){
-		fs.appendFile(this.file, `${id}\n`)
+		fs.appendFile(this.file, `${id}\n`, (err) => {if (err){console.error(err)}})
 		super.add(id)
 	}
 
