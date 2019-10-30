@@ -3,9 +3,9 @@ class TagHandler {
 		this.untaggable = untaggable
 		this.restrictions = restrictions
 
-		// client.on("message", message => this.handleGlobalTag(message))
+		client.on("message", message => this.handleGlobalTag(message))
 		client.on("message", message => this.handleChannelTag(message))
-		// client.on("messageUpdate", (_, message) => this.handleGlobalTag(message))
+		client.on("messageUpdate", (_, message) => this.handleGlobalTag(message))
 		client.on("messageUpdate", (_, message) => this.handleChannelTag(message))
 	}
 
