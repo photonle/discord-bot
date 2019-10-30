@@ -29,7 +29,6 @@ client.registry.registerGroups([
 client.registry.registerDefaults()
 client.registry.registerCommandsIn(__dirname + "/cmds")
 
-
 client.on('ready', () => {
 	client.generateInvite().then(() => console.log)
 	client.user.setPresence({
@@ -44,138 +43,56 @@ client.on('ready', () => {
 	client.logs.log("Loaded Version " + pkg.version);
 });
 
-let untaggable_full = new Set(["142796643589292032", "221740543045009408", "263541113913212929"])
-let untaggable = new Set(["142796643589292032", "263541113913212929", "191255947648172033", "221740543045009408", "303663831274487810"])
-let untaggable_roles = new Set(["479485006209613839"])
+const UNTAGABLE_FULL = 1 // Cannot be tagged by regular people, can tag other bypassed people.
+const UNTAGABLE_BYPASS = 2 // Can be tagged and can tag untaggables.
 
-let no_tag_channels = new Set(["479487537006510086", "517411139374547016", "588412504112103424"])
-let support = new Set(["479485006209613839", "479485091710631936", "517410625203470349"])
-let warned = new Set()
-
-let locked_warn = false
-function writeSet(file, set){
-	if (locked_warn){return}
-	locked_warn = true
-
-	let str = fs.createWriteStream(file)
-	str.on('ready', () => {
-		for (let obj of set){str.write(obj.toString()); str.write('\n')}
-		str.close()
-		locked_warn = false
-	})
-	str.on('error', () => {
-		locked_warn = false
-	})
+// Untaggable people (CDT).
+let untaggable = {
+	"142796643589292032": UNTAGABLE_FULL, // Schmal
+	"221740543045009408": UNTAGABLE_FULL, // Monarch
+	"263541113913212929": UNTAGABLE_FULL, // Noble
+	"191255947648172033": UNTAGABLE_BYPASS, // Super Meaty
+	"239031520587808769": UNTAGABLE_BYPASS, // Internet
+	"170593095312867328": UNTAGABLE_BYPASS, // Creator
+	"303663831274487810": UNTAGABLE_BYPASS // GermanDude
+}
+let tag_restrictions = {
+	"479487537006510086": { // Support 1
+		roles: new Set([
+			"479485006209613839" // CDT
+		]),
+		members: new Set(Object.keys(untaggable)),
+		warn: true,
+		warnbypass: new Set([
+			'479485091710631936', // Support
+			'552032086828122112', // Moderator
+			'481511094725115906', // Dev
+			'495848941896859658', // Master
+			'479485006209613839', // CDT
+			'586262825958375435' // Support Lead
+		]),
+		message: "Try asking our support team."
+	},
+	"588412504112103424": { // Support 2
+		roles: new Set([
+			"479485006209613839"
+		]),
+		members: new Set(Object.keys(untaggable)),
+		warn: true,
+		warnbypass: new Set([
+			'479485091710631936', // Support
+			'552032086828122112', // Moderator
+			'481511094725115906', // Dev
+			'495848941896859658', // Master
+			'479485006209613839', // CDT
+			'586262825958375435' // Support Lead
+		]),
+		message: "Try asking our support team."
+	}
 }
 
-function readLines(file, func){
-	let input = fs.createReadStream(file, {encoding: 'utf8'})
-	input.on('error', (err) => {console.error(err)})
-
-	let remaining = ''
-	input.on('data', function(data) {
-		remaining += data
-		let index = remaining.indexOf('\n')
-		let last  = 0
-
-		while (index > -1) {
-			let line = remaining.substring(last, index)
-			last = index + 1
-			func(line)
-			index = remaining.indexOf('\n', last)
-		}
-
-		remaining = remaining.substring(last)
-	})
-
-	input.on('end', function() {
-		if (remaining.length > 0) {
-			func(remaining)
-		}
-	})
-}
-readLines('/app/warned', (id) => {
-	warned.add(id)
-})
-
-
-client.on('typingStart', async (channel, user) => {
-	let id = channel.id
-	let gm = channel.guild.member(user)
-	if (no_tag_channels.has(id) && !warned.has(user.id) && (!gm || !gm.roles.some((role) => {return support.has(role.id)}))){
-		channel.send(`Hi, ${user.toString()}! If you're looking for support, please do not tag any of the Core Development Team (red) members. We have a Support Team ready to help you!
-
-*Before* you tag anyone, please read the pinned messages.
-To troubleshoot your issue on your own, please try the following:
-	• Uninstall the last Photon addon you installed before your issue started to occur.
-	• Try restarting your game.
-	• Try looking through your code or addons to potentially find something not entered correctly or missing.
-	• Finally, head over to the Photon wiki page for further help: <https://photon.lighting/wiki/index.php?title=Main_Page>
-
-If none of the above has help fixed your issue, go ahead and tag one of the blue Support Team members and they will be with you shortly.`)
-		warned.add(user.id)
-		writeSet('/app/warned', warned)
-	}
-})
-
-client.on('message', (message) => {
-	if (message.author.bot){return}
-
-	let channel = message.channel
-	let cid = channel.id
-
-	let mentions = message.mentions
-	if (mentions.members && mentions.members.some((member) => untaggable_full.has(member.id)) && !untaggable.has(message.member.id)){
-		let usrs = mentions.members.filter((member) => untaggable_full.has(member.id))
-		let str = usrs.array().map(x => x.displayName).join(" or ")
-		let word = usrs.size === 1 ? "They're a busy person." : "They're busy people."
-		channel.send(`Hey ${message.author}, you don't really need to tag ${str}. ${word}`)
-		message.delete()
-		return
-	}
-
-	if (!no_tag_channels.has(cid)){return}
-	if (!message.member || message.member.roles.some((role) => {return support.has(role.id)})){return}
-
-	if (mentions.members && mentions.members.some((member) => untaggable.has(member.id))){
-		channel.send(`Hey ${message.author.toString()}. Are you sure you need to tag the core dev team members?`)
-		message.delete()
-		return
-	}
-	if (mentions.roles && mentions.roles.some((role) => untaggable_roles.has(role.id))){
-		channel.send(`Hey ${message.author.toString()}. Are you sure you need to tag the core dev team members?`)
-		message.delete()
-	}
-})
-client.on('messageUpdate', (old, message) => {
-	if (message.author.bot){return}
-
-	let channel = message.channel
-	let cid = channel.id
-
-	let mentions = message.mentions
-	if (mentions.members && mentions.members.some((member) => untaggable_full.has(member.id)) && !untaggable.has(message.member.id)){
-		let usrs = mentions.members.filter((member) => untaggable_full.has(member.id))
-		let str = usrs.array().map(x => x.displayName).join(" or ")
-		let word = usrs.size === 1 ? "They're a busy person." : "They're busy people."
-		channel.send(`Hey ${message.author}, you don't really need to tag ${str}. ${word}`)
-		message.delete()
-		return
-	}
-
-	if (!no_tag_channels.has(cid)){return}
-	if (!message.member || message.member.roles.some((role) => {return support.has(role.id)})){return}
-
-	if (mentions.members && mentions.members.some((member) => untaggable.has(member.id))){
-		channel.send(`Hey ${message.author.toString()}. Are you sure you need to tag the core dev team members?`)
-		message.delete()
-		return
-	}
-	if (mentions.roles && mentions.roles.some((role) => untaggable_roles.has(role.id))){
-		channel.send(`Hey ${message.author.toString()}. Are you sure you need to tag the core dev team members?`)
-		message.delete()
-	}
-})
+require('./libs/warner')(client,'/app/warned', tag_restrictions)
+require('./libs/tagger')(client, untaggable, tag_restrictions)
 
 client.on("commandError", (cmd, err, msg) => {
 	console.error(err)
