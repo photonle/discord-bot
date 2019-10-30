@@ -42,7 +42,7 @@ class Warner extends Set {
 
 	async processType(channel, user){
 		let cid = channel.id
-		let restrict = tag_restrictions[cid]
+		let restrict = this.restrictions[cid]
 		if (restrict === undefined){return}
 		if (!restrict.warn){return}
 
