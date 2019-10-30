@@ -28,7 +28,7 @@ class TagHandler {
 		let block = blocked.array().map(user => user.displayName).join(" or ")
 		let phrase = blocked.size === 1 ? "They're a busy person." : "They're busy people."
 
-		channel.send(`Hey ${message.author}, you don't really need to tag ${block}. ${phrase}`)
+		message.channel.send(`Hey ${message.author}, you don't really need to tag ${block}. ${phrase}`)
 		message.delete()
 	}
 
