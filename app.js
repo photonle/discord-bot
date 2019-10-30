@@ -105,3 +105,8 @@ client.login(process.env.DISCORD_TOKEN)
 
 process.on('uncaughtException', (e) => {console.error(e); process.exit(1)})
 process.on('unhandledRejection', console.error)
+
+process.on('SIGTERM', async () => {
+	await client.destroy()
+	process.exit(0)
+})
