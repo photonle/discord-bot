@@ -61,7 +61,7 @@ To troubleshoot your issue on your own, please try the following:
 	• Uninstall the last Photon addon you installed before your issue started to occur.
 	• Try restarting your game.
 	• Try looking through your code or addons to potentially find something not entered correctly or missing.
-	• Finally, head over to the Photon wiki page for further help: <https://photon.lighting/wiki/index.php?title=Main_Page>
+	• Finally, head over to the Photon wiki page for further help: <https://github.com/photonle/Photon/wiki>
 
 If none of the above has help fixed your issue, go ahead and tag one of the blue Support Team members and they will be with you shortly.`)
 	}
