@@ -10,20 +10,15 @@ class TagHandler {
 	}
 
 	handleGlobalTag(message){
-		console.log("handling global tags")
 		if (message.author.bot){return}
-		console.log("not a bot")
 
 		let uid = message.author.id
 		if (this.untaggable[uid] !== undefined){return}
-		console.log("not untaggable")
 
 		let mentions = message.mentions
 		if (!mentions.members){return}
-		console.log("mentions people")
 
 		if (!mentions.members.some(mbr => this.untaggable[mbr.id] === 1)){return}
-		console.log("found restrictions")
 		let blocked = mentions.members.filter((mbr) => this.untaggable[mbr.id] === 1)
 		let block = blocked.array().map(user => user.displayName).join(" or ")
 		let phrase = blocked.size === 1 ? "They're a busy person." : "They're busy people."
