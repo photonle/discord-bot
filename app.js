@@ -59,10 +59,10 @@ let untaggable = {
 }
 let tag_restrictions = {
 	"479487537006510086": { // Support 1
-		roles: new Set([
-			"479485006209613839" // CDT
-		]),
-		members: new Set(Object.keys(untaggable)),
+		// roles: new Set([
+		// 	"479485006209613839" // CDT
+		// ]),
+		// members: new Set(Object.keys(untaggable)),
 		warn: true,
 		warnbypass: new Set([
 			'479485091710631936', // Support
@@ -75,10 +75,10 @@ let tag_restrictions = {
 		message: "Try asking our support team."
 	},
 	"588412504112103424": { // Support 2
-		roles: new Set([
-			"479485006209613839"
-		]),
-		members: new Set(Object.keys(untaggable)),
+		// roles: new Set([
+		// 	"479485006209613839"
+		// ]),
+		// members: new Set(Object.keys(untaggable)),
 		warn: true,
 		warnbypass: new Set([
 			'479485091710631936', // Support
