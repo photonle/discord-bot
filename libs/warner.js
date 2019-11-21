@@ -19,7 +19,7 @@ class Warner extends Set {
 			while (index > -1) {
 				let line = remaining.substring(last, index)
 				last = index + 1
-				this.add(line)
+Fix				super.add(line)
 				index = remaining.indexOf('\n', last)
 			}
 
