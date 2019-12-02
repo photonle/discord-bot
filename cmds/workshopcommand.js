@@ -41,6 +41,6 @@ module.exports = class WorkshopUpdateCommand extends Command {
 	}
 
 	reply(msg, str){
-		return msg.reply(`${str}\nCheck <#611492538674839553> for status changes.`)
+		return msg.reply(`${str}\nCheck <#650856664773427201> for status changes.`)
 	}
 }
