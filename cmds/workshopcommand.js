@@ -10,7 +10,7 @@ module.exports = class WorkshopUpdateCommand extends Command {
 		}
 
 		await this.queue('RemoveWorkshop', args)
-		return msg.say(`Added ${wsid} to the update queue.\nCheck <#611492538674839553> for status changes.`)
+		return msg.say(`Added ${wsid} to the update queue.\nCheck <#650856664773427201> for status changes.`)
 	}
 
 	/**
