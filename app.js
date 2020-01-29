@@ -30,7 +30,7 @@ client.registry.registerDefaults()
 client.registry.registerCommandsIn(__dirname + "/cmds")
 
 client.on('ready', () => {
-	client.generateInvite().then(() => console.log)
+	client.generateInvite().then(console.log)
 	client.user.setPresence({
 		status: "online",
 		afk: false,
@@ -39,9 +39,10 @@ client.on('ready', () => {
 			url: "https://photon.lighting",
 			type: "PLAYING"
 		}
-	});
-	client.logs.log("Loaded Version " + pkg.version);
-});
+	})
+
+	client.logs.log("Loaded Version " + pkg.version)
+})
 
 const UNTAGABLE_FULL = 1 // Cannot be tagged by regular people, can tag other bypassed people.
 const UNTAGABLE_BYPASS = 2 // Can be tagged and can tag untaggables.
