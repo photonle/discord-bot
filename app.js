@@ -35,7 +35,7 @@ client.on('ready', () => {
 		status: "online",
 		afk: false,
 		game: {
-			name: "with data.",
+			name: "with ions <:ion:651054566699433985>.",
 			url: "https://photon.lighting",
 			type: "PLAYING"
 		}
