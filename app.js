@@ -35,8 +35,8 @@ client.on('ready', () => {
 		status: "online",
 		afk: false,
 		game: {
-			name: "VCMod",
-			url: "https://www.gmodstore.com/market/view/21",
+			name: "with data.",
+			url: "https://photon.lighting",
 			type: "PLAYING"
 		}
 	});
