@@ -35,9 +35,9 @@ client.on('ready', () => {
 		status: "online",
 		afk: false,
 		game: {
-			name: ":police_think: Watching data.",
+			name: "with data.",
 			url: "https://photon.lighting",
-			type: 4
+			type: "PLAYING"
 		}
 	});
 	client.logs.log("Loaded Version " + pkg.version);
