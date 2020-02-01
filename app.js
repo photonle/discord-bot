@@ -50,7 +50,6 @@ const UNTAGABLE_BYPASS = 2 // Can be tagged and can tag untaggables.
 // Untaggable people (CDT).
 let untaggable = {
 	"142796643589292032": UNTAGABLE_FULL, // Schmal
-	"221740543045009408": UNTAGABLE_FULL, // Monarch
 	"263541113913212929": UNTAGABLE_BYPASS, // Noble
 	"191255947648172033": UNTAGABLE_BYPASS, // Super Meaty
 	"239031520587808769": UNTAGABLE_BYPASS, // Internet
