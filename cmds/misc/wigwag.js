@@ -11,6 +11,6 @@ module.exports = class SupportCommand extends Command {
 	}
 
 	async run(msg, args, _){
-				return msg.say(`Seems like you don't know how to wigwag properly. What a shame. Here, take this: <https://docs.google.com/document/d/1ksWNVhNDi_NaUy1kZOu5aD8wsGJQaC4RCO-_ZZfy14w/edit> `)
+		return msg.say(`Seems like you don't know how to wigwag properly. What a shame. Here, take this: <https://docs.google.com/document/d/1ksWNVhNDi_NaUy1kZOu5aD8wsGJQaC4RCO-_ZZfy14w/edit> `)
 	}
 }
