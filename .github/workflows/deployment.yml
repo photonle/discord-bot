@@ -18,12 +18,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build]
     steps:
-      -
-        name: Install Key
+      - name: Install Key
         uses: shimataro/ssh-key-action@v1.3.0
         with:
           private-key: ${{ secrets.SSH_KEY }}
           known-hosts: ${{ secrets.KNOWN_HOSTS }}
+      - name: Check CWD
+        run: ls
       - name: Deploy
         env:
           DOCKER_HOST: ssh://${{ secrets.FTP_USER }}@${{ secrets.FTP_HOST }}"
