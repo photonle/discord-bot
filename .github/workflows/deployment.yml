@@ -28,4 +28,5 @@ jobs:
           FTP_HOST: ${{ secrets.FTP_HOST }}
         run: |
           scp $FTP_USER@$FTP_HOST:~/env-"$DOCKER_NAME" .env
+          docker-compose --version
           docker-compose up -d bot
