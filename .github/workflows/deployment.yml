@@ -15,7 +15,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          tag_names: true
+          tag_semver: true
+          snapshot: true
       - name: Install Key
         uses: shimataro/ssh-key-action@v1.3.0
         with:
