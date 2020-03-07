@@ -26,7 +26,7 @@ jobs:
           DOCKER_NAME: photon-bot
           DOCKER_IMG_VERSION: latest
           FTP_USER: ${{ secrets.FTP_USER }}
-          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_HOST: git.doctor-internet.dev
         run: |
           scp $FTP_USER@$FTP_HOST:~/env-"$DOCKER_NAME" .env
           docker-compose --version
