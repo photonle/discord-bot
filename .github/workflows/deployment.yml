@@ -11,7 +11,7 @@ jobs:
       - name: Build & Publish Image
         uses: elgohr/Publish-Docker-Github-Action@2.7
         with:
-          name: ${{ github.repository }}/discord-bot/bot
+          name: ${{ github.repository }}/bot
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
