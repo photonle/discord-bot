@@ -8,14 +8,14 @@ jobs:
       - name: Update Docker-Compose
         run: sudo pip install docker-compose
       - uses: actions/checkout@master
-      - name: Build & Publish Image
-        uses: elgohr/Publish-Docker-Github-Action@2.7
-        with:
-          name: docker.pkg.github.com/${{ github.repository }}/discord-bot
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          registry: docker.pkg.github.com
-          tag_names: true
+#       - name: Build & Publish Image
+#         uses: elgohr/Publish-Docker-Github-Action@2.7
+#         with:
+#           name: docker.pkg.github.com/${{ github.repository }}/discord-bot
+#           username: ${{ github.actor }}
+#           password: ${{ secrets.GITHUB_TOKEN }}
+#           registry: docker.pkg.github.com
+#           tag_names: true
       - name: Install Key
         uses: shimataro/ssh-key-action@v1.3.0
         with:
