@@ -27,7 +27,7 @@ services:
       - "7422:3306"
   bot:
     build: .
-    image: docker.pkg.github.com/photonle/discord-bot/discord-bot:${DOCKER_IMG_VERSION}
+    image: docker.pkg.github.com/photonle/discord-bot/bot:${DOCKER_IMG_VERSION}
     env_file:
       - .env
     volumes:
