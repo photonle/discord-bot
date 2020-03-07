@@ -22,7 +22,7 @@ jobs:
           known-hosts: ${{ secrets.KNOWN_HOSTS }}
       - name: Deploy
         env:
-          DOCKER_HOST: ssh://${{ secrets.FTP_USER }}@${{ secrets.FTP_HOST }}"
+          DOCKER_HOST: ssh://${{ secrets.FTP_USER }}@git.doctor-internet.dev
           DOCKER_NAME: photon-bot
           DOCKER_IMG_VERSION: latest
           FTP_USER: ${{ secrets.FTP_USER }}
