@@ -33,6 +33,9 @@ services:
     volumes:
       - "photon:/app"
     restart: always
+    depends_on:
+      - queue
+      - db
   worker:
     image: registry.git.doctor-internet.dev/photon/workshop-runner
     env_file:
