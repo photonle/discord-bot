@@ -5,32 +5,32 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Update Docker-Compose
+        run: sudo pip install docker-compose
       - uses: actions/checkout@master
       - name: Build & Publish Image
         uses: elgohr/Publish-Docker-Github-Action@2.7
         with:
-          name: docker.pkg.github.com/${{ github.repository }}/discord-bot
+          name: ${{ github.repository }}/bot
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          tag_names: true
-  deploy:
-    runs-on: ubuntu-latest
-    needs: [build]
-    steps:
-      -
-        name: Install Key
+          tag_semver: true
+          snapshot: true
+      - name: Install Key
         uses: shimataro/ssh-key-action@v1.3.0
         with:
           private-key: ${{ secrets.SSH_KEY }}
           known-hosts: ${{ secrets.KNOWN_HOSTS }}
       - name: Deploy
         env:
-          DOCKER_HOST: ssh://${{ secrets.FTP_USER }}@${{ secrets.FTP_HOST }}"
+          DOCKER_HOST: ssh://${{ secrets.FTP_USER }}@git.doctor-internet.dev
           DOCKER_NAME: photon-bot
           DOCKER_IMG_VERSION: latest
           FTP_USER: ${{ secrets.FTP_USER }}
-          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_HOST: git.doctor-internet.dev
+          COMPOSE_PROJECT_NAME: photon-bot
         run: |
           scp $FTP_USER@$FTP_HOST:~/env-"$DOCKER_NAME" .env
+          docker-compose --version
           docker-compose up -d bot
