@@ -1,10 +1,8 @@
 // 3rd Party
 const {REST} = require("@discordjs/rest")
-const {Routes} = require("discord-api-types/v9")
-const {Client, Intents, Permissions} = require("discord.js")
+const {Routes} = require("discord-api-types/v10")
+const {Client, IntentsBitField: Intents, PermissionsBitField: Permissions} = require("discord.js")
 const {Collection} = require("discord.js")
-const SQLite = require("better-sqlite3")
-const {migrate} = require("@blackglory/better-sqlite3-migrations")
 
 // 1st Party
 const filepath = require("path")
@@ -12,21 +10,21 @@ const fs = require("fs").promises
 
 // Local Files
 const pkg = require("./package")
+const util = require("util")
 
 // Destructuring
-const Intent = Intents.FLAGS
-const Permission = Permissions.FLAGS
+const Intent = Intents.Flags
+const Permission = Permissions.Flags
 
 // Environment
 const OWNER = (process.env.OWNER || "239031520587808769").split(",").map(str => str.trim())
 const {DISCORD_GUILD: GUILD, DISCORD_TOKEN: TOKEN, DISCORD_CLIENT_ID: CLIENT, SQLITE_PATH: SQLITE} = process.env
 
 const client = new Client({
-	intents: [Intent.DIRECT_MESSAGES]
+	intents: [Intent.DirectMessages, Intent.Guilds]
 })
 
 client.commands = new Collection()
-client.database = new SQLite(SQLITE)
 
 async function setupCommands(){
 	const files = (await fs.readdir(filepath.join(__dirname, "commands"))).filter(file => file.endsWith(".js"))
@@ -35,11 +33,6 @@ async function setupCommands(){
 		const cmd = require(`./commands/${file}`)
 		client.commands.set(cmd.data.name, cmd)
 	}
-}
-
-async function runMigrations(db){
-	let migrations = (await fs.readdir(filepath.join(__dirname, "migrations"))).filter(file => file.endsWith(".js")).map(path => require("./" + filepath.join(".", "migrations", path)))
-	return migrate(db, migrations)
 }
 
 async function registerCommands(client){
@@ -82,7 +75,7 @@ client.on('ready', async () => {
 })
 
 client.on('interactionCreate', async (interaction) => {
-	if (!interaction.isCommand()){
+	if (!interaction.isChatInputCommand()){
 		return;
 	}
 
@@ -93,24 +86,30 @@ client.on('interactionCreate', async (interaction) => {
 
 	try {
 		let cmd = client.commands.get(commandName)
-		let callback = cmd.execute
 		const callbacks = cmd.callbacks
 
 		let subGroup = opts.getSubcommandGroup(false)
 		let subCmd = opts.getSubcommand(false)
 
-		if (subGroup !== null && subCmd !== null && callbacks[subGroup] !== undefined && callbacks[subGroup][subCmd] !== undefined){
-			callback = callbacks[subGroup][subCmd]
-		} else if (subGroup == null && subCmd !== null && callbacks[subCmd] !== undefined){
-			callback = callbacks[subCmd]
+		let callback = undefined
+		if (subGroup !== null && subCmd !== null){
+			try {
+				callback = callbacks[subGroup][subCmd]
+			} catch (e){}
+		} else if (subCmd !== null){
+			try {
+				callback = callbacks[subCmd]
+			} catch (e){}
+		} else {
+			callback = cmd.execute
 		}
 
 		if (callback === undefined){
-			let cmdName = [cmd, subGroup, subCmd].filter(Boolean).join(".")
+			let cmdName = [commandName, subGroup, subCmd].filter(Boolean).join(".")
 			return interaction.reply({content: `${cmdName} is missing a callback.`, ephemeral: true})
+		} else {
+			return callback(interaction)
 		}
-
-		return callback(interaction)
 	} catch (e){
 		console.error(e)
 		return interaction.reply({content: 'There was an error while executing this command!', ephemeral: true})
@@ -122,7 +121,6 @@ client.on("commandError", (cmd, err, msg) => {
 })
 
 async function main(){
-	await runMigrations(client.database)
 	await setupCommands()
 	await client.login(TOKEN)
 	await registerCommands(client)
