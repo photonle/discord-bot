@@ -38,7 +38,7 @@ function purge_messages(chnl, before, max){
 	let pre_count = 0
 
 	return new Promise((suc, fail) => {
-		chnl.fetchMessages({limit: max, before: before})
+		chnl.messages.fetch({limit: max, before: before})
 			.then((msgs) => {
 				pre_count = msgs.keyArray().length
 				before = msgs.reduce((t, v) => {return Math.min(t, v.id)}, before)

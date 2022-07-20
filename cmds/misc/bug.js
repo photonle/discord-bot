@@ -23,7 +23,7 @@ module.exports = class SupportCommand extends Command {
 			case 'photon':
 				return msg.say(`Looks like you've found a bug in Photon! Head over to <https://github.com/photonle/Photon/issues/new?labels=bug&template=bug-report.md> and post a bug report.`)
 			case 'bot':
-				return msg.say(`Looks like you've found a bug in me! Head over to <https://github.com/photonle/Photon-Bot/issues/new?labels=bug&template=bug-report.md> and post a bug report.`)
+				return msg.say(`Looks like you've found a bug in me! Head over to <https://github.com/photonle/bot/issues/new?labels=bug&template=bug-report.md> and post a bug report.`)
 		}
 	}
 }

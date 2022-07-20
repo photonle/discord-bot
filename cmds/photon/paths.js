@@ -1,12 +1,12 @@
-const Command = require("../reportcommand")
+const Command = require("../findercommand")
 
 module.exports = class PathsCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: 'paths',
+			name: 'path-search',
 			group: 'photon',
 			memberName: 'paths',
-			description: 'Search for lua files used in photon addons.',
+			description: 'Search for lua files used in photon addons, and returns a list of paths.',
 			args: [{
 				key: 'path',
 				label: 'File Path',

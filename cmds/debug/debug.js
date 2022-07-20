@@ -1,5 +1,5 @@
 const Command = require('discord.js-commando').Command
-const RichEmbed = require("discord.js").RichEmbed
+const RichEmbed = require("discord.js").MessageEmbed
 const Moment = require("moment")
 const pkg = require("../../package.json")
 
@@ -14,7 +14,7 @@ module.exports = class DebugCommand extends Command {
 	}
 
 	/**
-	 * @param {CommandMessage} msg The incoming message.
+	 * @param {CommandoMessage} msg The incoming message.
 	 * @param {Object|string|Array<string>} args The command arguments.
 	 * @param {boolean} _ If the incoming message is from a pattern match.
 	 * @returns {Promise<Message>}
@@ -22,7 +22,7 @@ module.exports = class DebugCommand extends Command {
 	async run(msg, args, _){
 		let rich = new RichEmbed()
 
-		rich.setAuthor("Doctor Internet", msg.client.users.get("239031520587808769").avatarURL, "https://limelightgaming.net/forums/user-2746.html")
+		rich.setAuthor("Doctor Internet", msg.client.users.fetch("239031520587808769").avatarURL, "https://doctor-internet.dev")
 		rich.setDescription(`A bot by Doctor Internet\n\nDebug Information`)
 
 		rich.addField("Version", `${pkg.name}@${pkg.version}`, true)

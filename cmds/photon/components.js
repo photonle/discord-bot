@@ -1,12 +1,12 @@
-const Command = require("../reportcommand")
+const Command = require("../findercommand")
 
 module.exports = class ComponentsCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: 'components',
+			name: 'component-search',
 			group: 'photon',
 			memberName: 'components',
-			description: 'Search for component names used in photon addons.',
+			description: 'Search for component names used in photon addons, and returns a list of component names.',
 			args: [{
 				key: 'path',
 				label: 'Component Name',

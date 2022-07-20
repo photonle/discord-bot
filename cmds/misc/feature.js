@@ -16,7 +16,7 @@ module.exports = class SupportCommand extends Command {
 			case 'photon':
 				return msg.say(`That looks like a good idea! Head over to <https://github.com/photonle/Photon/issues/new?labels=feature&template=feature-request.md> and post a feature request!`)
 			case 'bot':
-				return msg.say(`That looks like a good idea! Head over to <https://github.com/photonle/Photon-Bot/issues/new?labels=feature&template=feature-request.md> and post a feature request!`)
+				return msg.say(`That looks like a good idea! Head over to <https://github.com/photonle/bot/issues/new?labels=feature&template=feature-request.md> and post a feature request!`)
 		}
 	}
 }

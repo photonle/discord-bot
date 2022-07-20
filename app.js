@@ -1,36 +1,75 @@
-require('dotenv').config()
+// 3rd Party
+const {REST} = require("@discordjs/rest")
+const {Routes} = require("discord-api-types/v9")
+const {Client, Intents, Permissions} = require("discord.js")
+const {Collection} = require("discord.js")
+const SQLite = require("better-sqlite3")
+const {migrate} = require("@blackglory/better-sqlite3-migrations")
 
-const Discord = require("discord.js-commando")
-const http = require("https")
-const fs = require("fs")
+// 1st Party
+const filepath = require("path")
+const fs = require("fs").promises
 
-const pkg = require("./package.json")
+// Local Files
+const pkg = require("./package")
 
-const client = new Discord.Client({
-	owner: ['239031520587808769', '142796643589292032', '191255947648172033', '263541113913212929'],
-	commandPrefix: '!',
-	disableEveryone: true,
-	unknownCommandResponse: false
+// Destructuring
+const Intent = Intents.FLAGS
+const Permission = Permissions.FLAGS
+
+// Environment
+const OWNER = (process.env.OWNER || "239031520587808769").split(",").map(str => str.trim())
+const {DISCORD_GUILD: GUILD, DISCORD_TOKEN: TOKEN, DISCORD_CLIENT_ID: CLIENT, SQLITE_PATH: SQLITE} = process.env
+
+const client = new Client({
+	intents: [Intent.DIRECT_MESSAGES]
 })
-client.logs = require("./libs/logs.js")
 
-client.on('error', client.logs.error)
-client.on('warn', client.logs.warn)
-client.on('disconnect', () => {client.logs.warn('Disconnected from socket.')})
-client.on('reconnecting', () => {client.logs.warn('Reconnecting to discord.')})
+client.commands = new Collection()
+client.database = new SQLite(SQLITE)
 
-client.registry.registerGroups([
-	['debug', 'Debugging'],
-	['docs', 'Documentation'],
-	['misc', 'Miscellaneous'],
-	['help', 'Help'],
-	['photon', 'PLE Integration']
-])
-client.registry.registerDefaults()
-client.registry.registerCommandsIn(__dirname + "/cmds")
+async function setupCommands(){
+	const files = (await fs.readdir(filepath.join(__dirname, "commands"))).filter(file => file.endsWith(".js"))
+	for (const file of files){
+		console.log(`registering ${file}`)
+		const cmd = require(`./commands/${file}`)
+		client.commands.set(cmd.data.name, cmd)
+	}
+}
 
-client.on('ready', () => {
-	client.generateInvite().then(console.log)
+async function runMigrations(db){
+	let migrations = (await fs.readdir(filepath.join(__dirname, "migrations"))).filter(file => file.endsWith(".js")).map(path => require("./" + filepath.join(".", "migrations", path)))
+	return migrate(db, migrations)
+}
+
+async function registerCommands(client){
+	const rest = (new REST({version: 9})).setToken(TOKEN)
+
+	let cmds = []
+	for (let cmd of client.commands.values()){
+		cmds.push(cmd.data.toJSON())
+	}
+
+	console.log("updating guild commands")
+	try {
+		await rest.put(
+			Routes.applicationGuildCommands(CLIENT, GUILD),
+			{body: cmds},
+		)
+	} catch (e){
+		console.error(e);
+	}
+}
+
+client.on('ready', async () => {
+	console.log("login complete")
+
+	let invite = await client.generateInvite({
+		scopes: ["applications.commands", "bot"],
+		permissions: Permission.SEND_MESSAGES
+	})
+	console.log(invite)
+
 	client.user.setPresence({
 		status: "online",
 		afk: false,
@@ -40,74 +79,62 @@ client.on('ready', () => {
 			type: "PLAYING"
 		}
 	})
-
-	client.logs.log("Loaded Version " + pkg.version)
 })
 
-const UNTAGABLE_FULL = 1 // Cannot be tagged by regular people, can tag other bypassed people.
-const UNTAGABLE_BYPASS = 2 // Can be tagged and can tag untaggables.
-
-// Untaggable people (CDT).
-let untaggable = {
-	"142796643589292032": UNTAGABLE_FULL, // Schmal
-	"263541113913212929": UNTAGABLE_BYPASS, // Noble
-	"191255947648172033": UNTAGABLE_BYPASS, // Super Meaty
-	"239031520587808769": UNTAGABLE_BYPASS, // Internet
-	"170593095312867328": UNTAGABLE_BYPASS, // Creator
-	"303663831274487810": UNTAGABLE_BYPASS, // GermanDude
-	"221792879763390468": UNTAGABLE_BYPASS // SGM
-}
-let tag_restrictions = {
-	"479487537006510086": { // Support 1
-		// roles: new Set([
-		// 	"479485006209613839" // CDT
-		// ]),
-		// members: new Set(Object.keys(untaggable)),
-		warn: true,
-		warnbypass: new Set([
-			'479485091710631936', // Support
-			'552032086828122112', // Moderator
-			'481511094725115906', // Dev
-			'495848941896859658', // Master
-			'479485006209613839', // CDT
-			'586262825958375435' // Support Lead
-		]),
-		message: "Try asking our support team."
-	},
-	"588412504112103424": { // Support 2
-		// roles: new Set([
-		// 	"479485006209613839"
-		// ]),
-		// members: new Set(Object.keys(untaggable)),
-		warn: true,
-		warnbypass: new Set([
-			'479485091710631936', // Support
-			'552032086828122112', // Moderator
-			'481511094725115906', // Dev
-			'495848941896859658', // Master
-			'479485006209613839', // CDT
-			'586262825958375435' // Support Lead
-		]),
-		message: "Try asking our support team."
+client.on('interactionCreate', async (interaction) => {
+	if (!interaction.isCommand()){
+		return;
 	}
-}
 
-new (require('./libs/warner'))(client,'/app/warned', tag_restrictions)
-new (require('./libs/tagger'))(client, untaggable, tag_restrictions)
+	const {commandName, options: opts} = interaction
+	if (!client.commands.has(commandName)){
+		return
+	}
+
+	try {
+		let cmd = client.commands.get(commandName)
+		let callback = cmd.execute
+		const callbacks = cmd.callbacks
+
+		let subGroup = opts.getSubcommandGroup(false)
+		let subCmd = opts.getSubcommand(false)
+
+		if (subGroup !== null && subCmd !== null && callbacks[subGroup] !== undefined && callbacks[subGroup][subCmd] !== undefined){
+			callback = callbacks[subGroup][subCmd]
+		} else if (subGroup == null && subCmd !== null && callbacks[subCmd] !== undefined){
+			callback = callbacks[subCmd]
+		}
+
+		if (callback === undefined){
+			let cmdName = [cmd, subGroup, subCmd].filter(Boolean).join(".")
+			return interaction.reply({content: `${cmdName} is missing a callback.`, ephemeral: true})
+		}
+
+		return callback(interaction)
+	} catch (e){
+		console.error(e)
+		return interaction.reply({content: 'There was an error while executing this command!', ephemeral: true})
+	}
+})
 
 client.on("commandError", (cmd, err, msg) => {
 	console.error(err)
 })
-let cmd = client.registry.commands.get("glua")
-if (cmd){cmd.dataTable = require('./libs/glua.json')}
 
-// Log our bot in
-client.login(process.env.DISCORD_TOKEN)
+async function main(){
+	await runMigrations(client.database)
+	await setupCommands()
+	await client.login(TOKEN)
+	await registerCommands(client)
+}
 
 process.on('uncaughtException', (e) => {console.error(e); process.exit(1)})
-process.on('unhandledRejection', console.error)
+process.on('unhandledRejection', (e) => {console.error(e)})
 
 process.on('SIGTERM', async () => {
+	console.log("Recieved SIGTERM, hanging up.")
 	await client.destroy()
 	process.exit(0)
 })
+
+main()

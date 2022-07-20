@@ -51,7 +51,7 @@ class Warner extends Set {
 
 		let gm = channel.guild.member(user)
 		if (!gm){return}
-		if (gm.roles.some(role => restrict.warnbypass.has(role.id))){return}
+		if (gm.roles.cache.some(role => restrict.warnbypass.has(role.id))){return}
 
 		this.add(uid)
 		return channel.send(`Hi, ${user}! If you're looking for support, please do not tag any of the Core Development Team (red) members. We have a Support Team ready to help you!

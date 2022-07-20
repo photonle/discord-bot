@@ -9,6 +9,7 @@ module.exports = class FinderCommand extends Command {
 		this.queryType = "vehicle"
 		this.finderType = "name"
 		this.finderName = "cname"
+		this.reportName = "detail"
 	}
 
 	async run(msg, args, _){
@@ -23,7 +24,7 @@ module.exports = class FinderCommand extends Command {
 			return (await reply).edit(`\`${args.path.replace(/`/, '\`')}\` matches too many results to display, please be more specific.`)
 		}
 
-		return (await reply).edit(`${matches}\n\nTo see which addons a ${this.queryType} is used in, run !${this.name}s {${this.finderType}}`)
+		return (await reply).edit(`${matches}\n\nTo see which addons a ${this.queryType} is used in, run the details command for {${this.finderType}}`)
 	}
 
 	generateFinderQuery(path){

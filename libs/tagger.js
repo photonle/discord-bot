@@ -34,7 +34,7 @@ class TagHandler {
 		let cid = message.channel.id
 		let restrict = this.restrictions[cid]
 		if (restrict === undefined){return}
-		if (message.member.roles.some(role => restrict.warnbypass.has(role.id))){return}
+		if (message.member.roles.cache.some(role => restrict.warnbypass.has(role.id))){return}
 
 		let mentions = message.mentions
 		if (mentions.members && mentions.members.some(member => restrict.members.has(member.id))){
