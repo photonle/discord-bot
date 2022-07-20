@@ -41,46 +41,58 @@ const client = new Client({
 client.commands = new Collection()
 
 async function setupDatabase(){
-	return pool.query(`
-		CREATE TABLE IF NOT EXISTS authors (
-			sid BIGINT UNSIGNED,
-			name VARCHAR(500),
-			PRIMARY KEY (sid)
-		);
-		CREATE TABLE IF NOT EXISTS addons (
-			wsid BIGINT UNSIGNED,
-			name VARCHAR(500),
-			author BIGINT UNSIGNED,
-			PRIMARY KEY (wsid),
-			FOREIGN KEY (author) REFERENCES authors(sid) ON DELETE CASCADE ON UPDATE CASCADE
-		);
-		CREATE TABLE IF NOT EXISTS files (
-		    path VARCHAR(500),
-		    wsid BIGINT UNSIGNED,
-		    PRIMARY KEY (wsid, path),
-		    FOREIGN KEY (wsid) REFERENCES addons(wsid) ON DELETE CASCADE ON UPDATE CASCADE   
-		);
-		CREATE TABLE IF NOT EXISTS components (
-		    component VARCHAR(100),
-		    wsid BIGINT UNSIGNED,
-		    PRIMARY KEY (wsid, component),
-		    FOREIGN KEY (wsid) REFERENCES addons(wsid) ON DELETE CASCADE ON UPDATE CASCADE
-	  	);
-        CREATE TABLE IF NOT EXISTS vehicles (
-			vehicle VARCHAR(100),
-			wsid BIGINT UNSIGNED,
-			PRIMARY KEY (wsid, vehicle),
-			FOREIGN KEY (wsid) REFERENCES addons(wsid) ON DELETE CASCADE ON UPDATE CASCADE
-        );
-		CREATE TABLE IF NOT EXISTS errors (
-		    path VARCHAR(500),
-		    wsid BIGINT UNSIGNED,
-		    error TEXT,
-            PRIMARY KEY (wsid, path),
-            FOREIGN KEY (wsid) REFERENCES addons(wsid) ON DELETE CASCADE ON UPDATE CASCADE,
-			FOREIGN KEY (path) REFERENCES files(path) ON DELETE CASCADE ON UPDATE CASCADE
-		);
-	`)
+	Promise.all([
+		pool.query(`
+			CREATE TABLE IF NOT EXISTS authors (
+				sid BIGINT UNSIGNED,
+				name VARCHAR(500),
+				PRIMARY KEY (sid)
+			);
+		`),
+		pool.query(`
+			CREATE TABLE IF NOT EXISTS addons (
+				wsid BIGINT UNSIGNED,
+				name VARCHAR(500),
+				author BIGINT UNSIGNED,
+				PRIMARY KEY (wsid),
+				FOREIGN KEY (author) REFERENCES authors(sid) ON DELETE CASCADE ON UPDATE CASCADE
+			);
+		`),
+		pool.query(`
+			CREATE TABLE IF NOT EXISTS files (
+				path VARCHAR(500),
+				wsid BIGINT UNSIGNED,
+				PRIMARY KEY (wsid, path),
+				FOREIGN KEY (wsid) REFERENCES addons(wsid) ON DELETE CASCADE ON UPDATE CASCADE   
+			);
+		`),
+		pool.query(`
+			CREATE TABLE IF NOT EXISTS components (
+				component VARCHAR(100),
+				wsid BIGINT UNSIGNED,
+				PRIMARY KEY (wsid, component),
+				FOREIGN KEY (wsid) REFERENCES addons(wsid) ON DELETE CASCADE ON UPDATE CASCADE
+			);
+		`),
+		pool.query(`
+			CREATE TABLE IF NOT EXISTS vehicles (
+				vehicle VARCHAR(100),
+				wsid BIGINT UNSIGNED,
+				PRIMARY KEY (wsid, vehicle),
+				FOREIGN KEY (wsid) REFERENCES addons(wsid) ON DELETE CASCADE ON UPDATE CASCADE
+			);
+		`),
+		pool.query(`
+			CREATE TABLE IF NOT EXISTS errors (
+				path VARCHAR(500),
+				wsid BIGINT UNSIGNED,
+				error TEXT,
+				PRIMARY KEY (wsid, path),
+				FOREIGN KEY (wsid) REFERENCES addons(wsid) ON DELETE CASCADE ON UPDATE CASCADE,
+				FOREIGN KEY (path) REFERENCES files(path) ON DELETE CASCADE ON UPDATE CASCADE
+			);
+		`)]
+	)
 }
 
 async function setupCommands(){
