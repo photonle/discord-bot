@@ -88,7 +88,6 @@ async function setupDatabase(){
 				wsid BIGINT UNSIGNED,
 				error TEXT,
 				PRIMARY KEY (wsid, path),
-				FOREIGN KEY (wsid) REFERENCES addons(wsid) ON DELETE CASCADE ON UPDATE CASCADE,
 				FOREIGN KEY (path, wsid) REFERENCES files(path, wsid) ON DELETE CASCADE ON UPDATE CASCADE
 			);
 		`)]
