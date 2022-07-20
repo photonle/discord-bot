@@ -21,7 +21,8 @@ const {
 	MYSQL_HOST: HOST,
 	MYSQL_USER: USER,
 	MYSQL_PASS: PASS,
-	MYSQL_DB: DB
+	MYSQL_DB: DB,
+	MYSQL_PORT: PORT
 } = process.env
 
 let pool = createPool({
@@ -29,7 +30,8 @@ let pool = createPool({
 	host: HOST,
 	user: USER,
 	password: PASS,
-	database: DB
+	database: DB,
+	port: PORT
 })
 
 const client = new Client({
