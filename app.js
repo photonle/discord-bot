@@ -1,24 +1,36 @@
-// 3rd Party
-const {REST} = require("@discordjs/rest")
-const {Routes} = require("discord-api-types/v10")
-const {Client, IntentsBitField: Intents, PermissionsBitField: Permissions} = require("discord.js")
-const {Collection} = require("discord.js")
-
-// 1st Party
-const filepath = require("path")
+const path = require("path")
 const fs = require("fs").promises
 
-// Local Files
+const {REST} = require("@discordjs/rest")
+const {Routes} = require("discord-api-types/v10")
+const {Client, IntentsBitField: Intents, PermissionsBitField: Permissions, Collection} = require("discord.js")
+const {createPool} = require("mysql2")
+const migration = require("mysql-migrations")
+
 const pkg = require("./package")
 const util = require("util")
 
-// Destructuring
 const Intent = Intents.Flags
 const Permission = Permissions.Flags
 
-// Environment
 const OWNER = (process.env.OWNER || "239031520587808769").split(",").map(str => str.trim())
-const {DISCORD_GUILD: GUILD, DISCORD_TOKEN: TOKEN, DISCORD_CLIENT_ID: CLIENT, SQLITE_PATH: SQLITE} = process.env
+const {
+	DISCORD_GUILD: GUILD,
+	DISCORD_TOKEN: TOKEN,
+	DISCORD_CLIENT_ID: CLIENT,
+	MYSQL_HOST: HOST,
+	MYSQL_USER: USER,
+	MYSQL_PASS: PASS,
+	MYSQL_DB: DB
+} = process.env
+
+let pool = createPool({
+	connectionLimit: 1,
+	host: HOST,
+	user: USER,
+	password: PASS,
+	database: DB
+})
 
 const client = new Client({
 	intents: [Intent.DirectMessages, Intent.Guilds]
@@ -26,8 +38,16 @@ const client = new Client({
 
 client.commands = new Collection()
 
+async function setupDatabase(){
+	return new Promise((resolve, reject) => {
+		migration.init(pool, path.join(__dirname, 'migrations'), () => {
+			return resolve()
+		})
+	})
+}
+
 async function setupCommands(){
-	const files = (await fs.readdir(filepath.join(__dirname, "commands"))).filter(file => file.endsWith(".js"))
+	const files = (await fs.readdir(path.join(__dirname, "commands"))).filter(file => file.endsWith(".js"))
 	for (const file of files){
 		console.log(`registering ${file}`)
 		const cmd = require(`./commands/${file}`)
@@ -121,6 +141,7 @@ client.on("commandError", (cmd, err, msg) => {
 })
 
 async function main(){
+	await setupDatabase()
 	await setupCommands()
 	await client.login(TOKEN)
 	await registerCommands(client)
