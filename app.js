@@ -4,8 +4,7 @@ const fs = require("fs").promises
 const {REST} = require("@discordjs/rest")
 const {Routes} = require("discord-api-types/v10")
 const {Client, IntentsBitField: Intents, PermissionsBitField: Permissions, Collection} = require("discord.js")
-const {createPool} = require("mysql2")
-const migration = require("mysql-migrations")
+const {createPool} = require("mysql2/promise")
 
 const pkg = require("./package")
 const util = require("util")
@@ -25,6 +24,7 @@ const {
 	MYSQL_PORT: PORT
 } = process.env
 
+/** @var {Pool} pool */
 let pool = createPool({
 	connectionLimit: 1,
 	host: HOST,
@@ -41,15 +41,46 @@ const client = new Client({
 client.commands = new Collection()
 
 async function setupDatabase(){
-	return new Promise((resolve, reject) => {
-		migration.init(pool, path.join(__dirname, 'migrations'), (err) => {
-			if (err){
-				reject(err)
-			} else {
-				resolve()
-			}
-		})
-	})
+	return pool.query(`
+        CREATE TABLE IF NOT EXISTS authors (
+            sid BIGINT UNSIGNED,
+            name VARCHAR(500),
+            PRIMARY KEY (sid)
+        );
+		CREATE TABLE IF NOT EXISTS addons (
+			wsid BIGINT UNSIGNED,
+			name VARCHAR(500),
+			author BIGINT UNSIGNED,
+			PRIMARY KEY (wsid),
+			FOREIGN KEY (author) REFERENCES authors(sid) ON DELETE CASCADE ON UPDATE CASCADE
+		);
+		CREATE TABLE IF NOT EXISTS files (
+		    path VARCHAR(500),
+		    wsid BIGINT UNSIGNED,
+		    PRIMARY KEY (wsid, path),
+		    FOREIGN KEY (wsid) REFERENCES addons(wsid) ON DELETE CASCADE ON UPDATE CASCADE   
+		);
+		CREATE TABLE IF NOT EXISTS components (
+		    component VARCHAR(100),
+		    wsid BIGINT UNSIGNED,
+		    PRIMARY KEY (wsid, component),
+		    FOREIGN KEY (wsid) REFERENCES addons(wsid) ON DELETE CASCADE ON UPDATE CASCADE
+	  	);
+        CREATE TABLE IF NOT EXISTS vehicles (
+			vehicle VARCHAR(100),
+			wsid BIGINT UNSIGNED,
+			PRIMARY KEY (wsid, vehicle),
+			FOREIGN KEY (wsid) REFERENCES addons(wsid) ON DELETE CASCADE ON UPDATE CASCADE
+        );
+		CREATE TABLE IF NOT EXISTS errors (
+		    path VARCHAR(500),
+		    wsid BIGINT UNSIGNED,
+		    error TEXT,
+            PRIMARY KEY (wsid, path),
+            FOREIGN KEY (wsid) REFERENCES addons(wsid) ON DELETE CASCADE ON UPDATE CASCADE,
+			FOREIGN KEY (path) REFERENCES files(path) ON DELETE CASCADE ON UPDATE CASCADE
+		);
+	`)
 }
 
 async function setupCommands(){
