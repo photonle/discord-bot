@@ -42,8 +42,12 @@ client.commands = new Collection()
 
 async function setupDatabase(){
 	return new Promise((resolve, reject) => {
-		migration.init(pool, path.join(__dirname, 'migrations'), () => {
-			return resolve()
+		migration.init(pool, path.join(__dirname, 'migrations'), (err) => {
+			if (err){
+				reject(err)
+			} else {
+				resolve()
+			}
 		})
 	})
 }
