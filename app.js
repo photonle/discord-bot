@@ -38,6 +38,7 @@ const client = new Client({
 	intents: [Intent.DirectMessages, Intent.Guilds]
 })
 
+client.pool = pool
 client.commands = new Collection()
 
 async function setupDatabase(){
@@ -176,7 +177,7 @@ client.on('interactionCreate', async (interaction) => {
 			let cmdName = [commandName, subGroup, subCmd].filter(Boolean).join(".")
 			return interaction.reply({content: `${cmdName} is missing a callback.`, ephemeral: true})
 		} else {
-			return callback(interaction)
+			return callback(interaction, client)
 		}
 	} catch (e){
 		console.error(e)
