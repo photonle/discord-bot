@@ -10,7 +10,7 @@
     "discord.js-commando": "0.10.0",
     "dotenv": "^8.2.0",
     "faktory-worker": "^3.3.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "mysql2": "^1.7.0",
     "promise": "^8.1.0",
     "sql-template-strings": "^2.2.2",
