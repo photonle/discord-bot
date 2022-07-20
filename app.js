@@ -42,11 +42,11 @@ client.commands = new Collection()
 
 async function setupDatabase(){
 	return pool.query(`
-        CREATE TABLE IF NOT EXISTS authors (
-            sid BIGINT UNSIGNED,
-            name VARCHAR(500),
-            PRIMARY KEY (sid)
-        );
+		CREATE TABLE IF NOT EXISTS authors (
+			sid BIGINT UNSIGNED,
+			name VARCHAR(500),
+			PRIMARY KEY (sid)
+		);
 		CREATE TABLE IF NOT EXISTS addons (
 			wsid BIGINT UNSIGNED,
 			name VARCHAR(500),
