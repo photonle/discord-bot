@@ -126,6 +126,7 @@ async function main(){
 	await setupCommands()
 	await client.login(TOKEN)
 	await registerCommands(client)
+	console.log("started")
 }
 
 process.on('uncaughtException', (e) => {console.error(e); process.exit(1)})
