@@ -146,6 +146,11 @@ client.on('ready', async () => {
 })
 
 client.on('interactionCreate', async (interaction) => {
+	if (interaction.isButton()){
+		client.emit('interactionButtonClicked', interaction)
+		return
+	}
+
 	if (!interaction.isChatInputCommand()){
 		return;
 	}
