@@ -12,6 +12,7 @@
 		"discord-api-types": "^0.36.2",
 		"discord.js": "^14.0.0",
 		"moment": "^2.27.0",
-		"mysql2": "^2.3.3"
+		"mysql2": "^2.3.3",
+		"sql-template-strings": "^2.2.2"
 	}
 }
