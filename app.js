@@ -31,7 +31,9 @@ let pool = createPool({
 	user: USER,
 	password: PASS,
 	database: DB,
-	port: PORT
+	port: PORT,
+	supportBigNumbers: true,
+	bigNumberStrings: true
 })
 
 const client = new Client({
