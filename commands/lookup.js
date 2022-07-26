@@ -1,7 +1,7 @@
 const {SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, EmbedBuilder} = require("@discordjs/builders")
 const {inspect} = require("util")
 const SQL = require("sql-template-strings")
-const {vehiclePage} = require("../libs/search")
+const {vehiclePage, componentPage} = require("../libs/search")
 
 let command = new SlashCommandBuilder()
 command.setName("lookup")
@@ -44,21 +44,21 @@ command.setName("lookup")
 		)
 	)
 
-function buildRow(next = "null", prev = "null", action = 'vehicle.list'){
+function buildRow(rowid = "row", next = "null", prev = "null", action = 'vehicle.list'){
 	next = !next || next === "null" ? false : next
 	prev = !prev || prev === "null" ? false : prev
 
 	let row = new ActionRowBuilder()
 	if (prev){
-		row.addComponents((new ButtonBuilder()).setStyle(2).setCustomId(`${action}:${String(prev)}`).setLabel("Previous Page"))
+		row.addComponents((new ButtonBuilder()).setStyle(2).setCustomId(`${rowid}:${action}:${String(prev)}`).setLabel("Previous Page"))
 	} else {
-		row.addComponents((new ButtonBuilder()).setStyle(2).setCustomId(`${action}:disabled.prev`).setDisabled(true).setLabel("Previous Page"))
+		row.addComponents((new ButtonBuilder()).setStyle(2).setCustomId(`${rowid}:${action}:disabled.prev`).setDisabled(true).setLabel("Previous Page"))
 	}
 
 	if (next){
-		row.addComponents((new ButtonBuilder()).setStyle(2).setCustomId(`${action}:${String(next)}`).setLabel("Next Page"))
+		row.addComponents((new ButtonBuilder()).setStyle(2).setCustomId(`${rowid}:${action}:${String(next)}`).setLabel("Next Page"))
 	} else {
-		row.addComponents((new ButtonBuilder()).setStyle(2).setCustomId(`${action}:disabled.next`).setDisabled(true).setLabel("Next Page"))
+		row.addComponents((new ButtonBuilder()).setStyle(2).setCustomId(`${rowid}:${action}:disabled.next`).setDisabled(true).setLabel("Next Page"))
 	}
 
 	return [
@@ -71,7 +71,7 @@ function buildEmbed(data){
 	for (let datum of data){
 		embeds.push(
 			(new EmbedBuilder())
-				.setTitle(datum.vehicle)
+				.setTitle(datum.vehicle ?? datum.component ?? "Unknown")
 				.setAuthor({
 					url: `https://steamcommunity.com/profiles/${datum.sid}`,
 					name: datum.author
@@ -87,6 +87,8 @@ function buildEmbed(data){
 	}
 	return embeds
 }
+
+let rowId = 0
 
 module.exports = {
 	data: command,
@@ -121,14 +123,18 @@ module.exports = {
 						embeds: buildEmbed(nextPage)
 					})
 				} else {
+					let rId = String(rowId++)
 					client.on('interactionButtonClicked', async (click) => {
 						let id = click.customId
 						let action
-						[action, id] = id.split(":")
+						[checkId, action, id] = id.split(":")
 						if (action !== "vehicle.list"){
 							return
 						}
 						if (id.startsWith("disabled")){
+							return
+						}
+						if (checkId !== rId){
 							return
 						}
 
@@ -139,13 +145,13 @@ module.exports = {
 						} = await vehiclePage(client.pool, id, query)
 
 						click.update({
-							components: buildRow(nextPageKey, lastPageKey),
+							components: buildRow(rId, nextPageKey, lastPageKey),
 							embeds: buildEmbed(nextPage)
 						})
 					})
 
 					await interaction.reply({
-						components: buildRow(nextPageKey, false),
+						components: buildRow(rId, nextPageKey, false),
 						embeds: buildEmbed(nextPage)
 					})
 				}
@@ -166,14 +172,18 @@ module.exports = {
 						embeds: buildEmbed(nextPage)
 					})
 				} else {
+					let rId = String(rowId++)
 					client.on('interactionButtonClicked', async (click) => {
 						let id = click.customId
 						let action
-						[action, id] = id.split(":")
+						[checkId, action, id] = id.split(":")
 						if (action !== "vehicle.list"){
 							return
 						}
 						if (id.startsWith("disabled")){
+							return
+						}
+						if (checkId !== rId){
 							return
 						}
 
@@ -184,13 +194,13 @@ module.exports = {
 						} = await vehiclePage(client.pool, id)
 
 						click.update({
-							components: buildRow(nextPageKey, lastPageKey),
+							components: buildRow(rId, nextPageKey, lastPageKey),
 							embeds: buildEmbed(nextPage)
 						})
 					})
 
 					await interaction.reply({
-						components: buildRow(nextPageKey, false),
+						components: buildRow(rId, nextPageKey, false),
 						embeds: buildEmbed(nextPage)
 					})
 				}
@@ -198,6 +208,233 @@ module.exports = {
 			},
 			async get(interaction){
 				await interaction.reply({content: "lookup.vehicle.get", ephemeral: true})
+			}
+		},
+		component: {
+			async search(interaction, client){
+				let query = interaction.options.getString("query")
+				if (!query || query === ''){
+					interaction.reply({
+						content: "You must give a query to search!",
+						ephemeral: true
+					})
+				}
+				query = `%${query}%`
+				query = SQL`component LIKE ${query}`
+
+				let {
+					nextPage,
+					nextPageKey
+				} = await componentPage(client.pool, '', query)
+
+				if (nextPage.length === 0){
+					interaction.reply({
+						content: "No components were found with that name!",
+					})
+				} else if (nextPage.length < 5){
+					return interaction.reply({
+						embeds: buildEmbed(nextPage)
+					})
+				} else {
+					let rId = String(rowId++)
+					client.on('interactionButtonClicked', async (click) => {
+						let id = click.customId
+						let action
+						[checkId, action, id] = id.split(":")
+						if (action !== "vehicle.list"){
+							return
+						}
+						if (id.startsWith("disabled")){
+							return
+						}
+						if (checkId !== rId){
+							return
+						}
+
+						let {
+							nextPage,
+							nextPageKey,
+							lastPageKey
+						} = await componentPage(client.pool, id, query)
+
+						click.update({
+							components: buildRow(rId, nextPageKey, lastPageKey),
+							embeds: buildEmbed(nextPage)
+						})
+					})
+
+					await interaction.reply({
+						components: buildRow(rId, nextPageKey, false),
+						embeds: buildEmbed(nextPage)
+					})
+				}
+
+			},
+			async list(interaction, client){
+				let {
+					nextPage,
+					nextPageKey
+				} = await componentPage(client.pool, '')
+				console.log(nextPage)
+
+				if (nextPage.length === 0){
+					interaction.reply({
+						content: "No vehicles are stored!",
+					})
+				} else if (nextPage.length < 5){
+					return interaction.reply({
+						embeds: buildEmbed(nextPage)
+					})
+				} else {
+					let rId = String(rowId++)
+					client.on('interactionButtonClicked', async (click) => {
+						let id = click.customId
+						let action
+						[checkId, action, id] = id.split(":")
+						if (action !== "vehicle.list"){
+							return
+						}
+						if (id.startsWith("disabled")){
+							return
+						}
+						if (checkId !== rId){
+							return
+						}
+
+						let {
+							nextPage,
+							nextPageKey,
+							lastPageKey
+						} = await componentPage(client.pool, id)
+
+						click.update({
+							components: buildRow(rId, nextPageKey, lastPageKey),
+							embeds: buildEmbed(nextPage)
+						})
+					})
+
+					await interaction.reply({
+						components: buildRow(rId, nextPageKey, false),
+						embeds: buildEmbed(nextPage)
+					})
+				}
+
+			},
+			async get(interaction){
+				await interaction.reply({content: "lookup.component.get", ephemeral: true})
+			}
+		},
+		addon: {
+			async search(interaction, client){
+				let query = interaction.options.getString("query")
+				if (!query || query === ''){
+					interaction.reply({
+						content: "You must give a query to search!",
+						ephemeral: true
+					})
+				}
+				query = `%${query}%`
+				query = SQL`vehicle LIKE ${query}`
+
+				let {
+					nextPage,
+					nextPageKey
+				} = await vehiclePage(client.pool, '', query)
+
+				if (nextPage.length === 0){
+					interaction.reply({
+						content: "No vehicles were found with that name!",
+					})
+				} else if (nextPage.length < 5){
+					return interaction.reply({
+						embeds: buildEmbed(nextPage)
+					})
+				} else {
+					let rId = String(rowId++)
+					client.on('interactionButtonClicked', async (click) => {
+						let id = click.customId
+						let action
+						[checkId, action, id] = id.split(":")
+						if (action !== "vehicle.list"){
+							return
+						}
+						if (id.startsWith("disabled")){
+							return
+						}
+						if (checkId !== rId){
+							return
+						}
+
+						let {
+							nextPage,
+							nextPageKey,
+							lastPageKey
+						} = await vehiclePage(client.pool, id, query)
+
+						click.update({
+							components: buildRow(rId, nextPageKey, lastPageKey),
+							embeds: buildEmbed(nextPage)
+						})
+					})
+
+					await interaction.reply({
+						components: buildRow(rId, nextPageKey, false),
+						embeds: buildEmbed(nextPage)
+					})
+				}
+
+			},
+			async list(interaction, client){
+				let {
+					nextPage,
+					nextPageKey
+				} = await componentPage(client.pool, '')
+
+				if (nextPage.length === 0){
+					interaction.reply({
+						content: "No vehicles are stored!",
+					})
+				} else if (nextPage.length < 5){
+					return interaction.reply({
+						embeds: buildEmbed(nextPage)
+					})
+				} else {
+					let rId = String(rowId++)
+					client.on('interactionButtonClicked', async (click) => {
+						let id = click.customId
+						let action
+						[checkId, action, id] = id.split(":")
+						if (action !== "vehicle.list"){
+							return
+						}
+						if (id.startsWith("disabled")){
+							return
+						}
+						if (checkId !== rId){
+							return
+						}
+
+						let {
+							nextPage,
+							nextPageKey,
+							lastPageKey
+						} = await vehiclePage(client.pool, id)
+
+						click.update({
+							components: buildRow(rId, nextPageKey, lastPageKey),
+							embeds: buildEmbed(nextPage)
+						})
+					})
+
+					await interaction.reply({
+						components: buildRow(rId, nextPageKey, false),
+						embeds: buildEmbed(nextPage)
+					})
+				}
+
+			},
+			async get(interaction){
+				await interaction.reply({content: "lookup.addon.get", ephemeral: true})
 			}
 		}
 	}
