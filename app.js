@@ -49,6 +49,8 @@ async function setupDatabase(){
 			CREATE TABLE IF NOT EXISTS authors (
 				sid BIGINT UNSIGNED,
 				name VARCHAR(500),
+                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				PRIMARY KEY (sid)
 			);
 		`),
@@ -57,6 +59,8 @@ async function setupDatabase(){
 				wsid BIGINT UNSIGNED,
 				name VARCHAR(500),
 				author BIGINT UNSIGNED,
+                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				PRIMARY KEY (wsid),
 				FOREIGN KEY (author) REFERENCES authors(sid) ON DELETE CASCADE ON UPDATE CASCADE
 			);
@@ -92,6 +96,16 @@ async function setupDatabase(){
 				error TEXT,
 				PRIMARY KEY (wsid, path),
 				FOREIGN KEY (wsid, path) REFERENCES files(wsid, path) ON DELETE CASCADE ON UPDATE CASCADE
+			);
+		`),
+		pool.query(`
+			CREATE TABLE IF NOT EXISTS jobs (
+				id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+				status enum("new", "locked", "done") NOT NULL DEFAULT "new",
+				type VARCHAR(500) NULL DEFAULT "",
+				data TEXT NULL,
+				created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 			);
 		`)]
 	)
