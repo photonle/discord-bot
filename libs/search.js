@@ -88,8 +88,19 @@ async function vehiclePage(pool, marker = false, where = false, perPage = 5){
 	], marker, where)
 }
 
+async function componentPage(pool, marker = false, where = false, perPage = 5){
+	return page(pool, "components c", [
+		"c.component",
+		"c.wsid",
+		"a.name as addon",
+		"au.sid",
+		"au.name as author"
+	], marker, where)
+}
+
 module.exports = {
-	vehiclePage
+	vehiclePage,
+	componentPage
 }
 
 
