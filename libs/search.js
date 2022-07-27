@@ -62,12 +62,14 @@ async function page(pool, table, fields, marker = false, where = false, perPage 
 
 	let lastPageKey = false
 	if (lastPage.length >= 1){
-		lastPageKey = lastPage.pop().vehicle
+		lastPageKey = lastPage.pop()
+		lastPageKey = lastPageKey.vehicle ?? lastPageKey.component ?? false
 	}
 
 	let nextPageKey = false
 	if (nextPage.length === perPage + 1){
-		nextPageKey = nextPage.pop().vehicle
+		nextPageKey = nextPage.pop()
+		nextPageKey = nextPageKey.vehicle ?? nextPageKey.component ?? false
 	}
 
 	return {
