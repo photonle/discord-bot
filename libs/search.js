@@ -28,7 +28,7 @@ async function paginate(pool, table, fields, where = false, asc = false, limit =
 	return (await pool.query(query))[0]
 }
 
-async function page(pool, table, fields, marker = false, where = false, perPage = 5){
+async function page(pool, table, fields, key = "vehicle", marker = false, where = false, perPage = 5){
 	let markerKey = fields[0]
 	let sqlWhere = []
 	if (where){
@@ -63,13 +63,13 @@ async function page(pool, table, fields, marker = false, where = false, perPage 
 	let lastPageKey = false
 	if (lastPage.length >= 1){
 		lastPageKey = lastPage.pop()
-		lastPageKey = lastPageKey.vehicle ?? lastPageKey.component ?? false
+		lastPageKey = lastPageKey[key] ?? false
 	}
 
 	let nextPageKey = false
 	if (nextPage.length === perPage + 1){
 		nextPageKey = nextPage.pop()
-		nextPageKey = nextPageKey.vehicle ?? nextPageKey.component ?? false
+		nextPageKey = nextPageKey[key] ?? false
 	}
 
 	return {
@@ -87,7 +87,7 @@ async function vehiclePage(pool, marker = false, where = false, perPage = 5){
 		"a.name as addon",
 		"au.sid",
 		"au.name as author"
-	], marker, where)
+	], "vehicle", marker, where)
 }
 
 async function componentPage(pool, marker = false, where = false, perPage = 5){
@@ -97,7 +97,7 @@ async function componentPage(pool, marker = false, where = false, perPage = 5){
 		"a.name as addon",
 		"au.sid",
 		"au.name as author"
-	], marker, where)
+	], "component", marker, where)
 }
 
 module.exports = {
