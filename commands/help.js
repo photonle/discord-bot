@@ -36,9 +36,8 @@ References:
 (🇫🇷) Video: <https://www.youtube.com/watch?v=f3VLrO4HYNs> 
 Paint.Net: <https://www.getpaint.net/>
 VTFEdit: <https://nemstools.github.io/pages/VTFLib-Download.html>`})
-		}
-	},
-			workshop_icon(interaction){
+		},
+		workshop_icon(interaction){
 			return interaction.reply({content: `Hi there,
 
 The support team at Photon, recommend the following steps to ensure you can make the best quality workshop icon for your vehicle and/or pack!
@@ -52,5 +51,6 @@ Why do we recommend this?
 Because it makes your addon seem more professinal and helps highlights your addon. You can add extra bits to your icon, such as text, banners, highlights, etc; as you seem fit!
 It also just looks neater then squishing a photo to fit the 512x512 mark.
 			`})
-		},
+		}
+	},
 }
