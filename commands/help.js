@@ -11,6 +11,10 @@ command.setName("help")
 		.setName("skinning")
 		.setDescription("Get help skinning vehicles.")
 	)
+	.addSubcommand(command => command
+		.setName("workshop_icon")
+		.setDescription("Get help making a good Workshop Icon.")
+	)
 
 module.exports = {
 	data: command,
@@ -33,5 +37,20 @@ References:
 Paint.Net: <https://www.getpaint.net/>
 VTFEdit: <https://nemstools.github.io/pages/VTFLib-Download.html>`})
 		}
-	}
+	},
+			workshop_icon(interaction){
+			return interaction.reply({content: `Hi there,
+
+The support team at Photon, recommend the following steps to ensure you can make the best quality workshop icon for your vehicle and/or pack!
+• Take a photo of a good distance away and ensure that the vehicle(s) is the key centre
+• Make a file in either Photoshop, Paint.net or even Paint. And make sure it is 512x512. 
+• Import your image in. 
+• And then just make sure that the vehicle is in the centre and can be seen and highlighted well. 
+• An example of this is this; (https://cdn.discordapp.com/attachments/650845277011312661/1002193930269499402/unknown.png).
+
+Why do we recommend this?
+Because it makes your addon seem more professinal and helps highlights your addon. You can add extra bits to your icon, such as text, banners, highlights, etc; as you seem fit!
+It also just looks neater then squishing a photo to fit the 512x512 mark.
+			`})
+		},
 }
